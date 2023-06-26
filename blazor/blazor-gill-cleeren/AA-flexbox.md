@@ -419,6 +419,27 @@ article:nth-child(2) {
 
 <img src="assets/one-item-take-control-it-self.png" alt="one-item-take-control-it-self" />
 
+### `flex-start`
+
+Si on crée une `column` en `flexbox`, par défaut tous les éléments vont prendre la largeur maximum:
+
+<img src="assets/maximum-flexbox-width-in-column.png" alt="maximum-flexbox-width-in-column" />
+
+Si on veut que le bouton n'ai que la largeur nécessaire, on utilise alors `align-self`:
+
+```css
+.button
+{
+    align-self: flex-start; // center, flex-end, ...
+}
+```
+
+<img src="assets/align-self-solve-problem-for-button.png" alt="align-self-solve-problem-for-button" />
+
+
+
+
+
 > ## Remarque:
 >
 > `justify-self` n'existe pas, car les espaces entre les `items` sont calculés pour **tous** et redistribué  fonction de **tous**.
