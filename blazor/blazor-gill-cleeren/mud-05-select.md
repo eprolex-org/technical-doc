@@ -116,6 +116,67 @@ On ne peut pas gérer deux fois l'événement `ValueChanged`.
 
 
 
+### Attribut `Value`
+
+Il reste un problème, si j'utilise un composant `State`, quand je revient sur mon composant la valeur a disparu, elle n'est plus `bindée` avec la valeur du `model`:
+
+<img src="assets/no-binding-with-valuechanged-only.png" alt="no-binding-with-valuechanged-only" />
+
+On doit utiliser `Value` avec `ValueChanged` pour avoir un `two-way binding` comme `@bind-Value`:
+
+```html
+<MudSelect
+    Label="Délai"
+    T="Delai"
+    For="() => DemandeAvis.Delai"
+    ToStringFunc="d => d.Libelle"
+    ValueChanged="OnDelaiChanged"
+    Value="DemandeAvis.Delai">
+
+    @foreach (var delai in _delais)
+    {
+        <MudSelectItem Value="delai"/>
+    }
+
+</MudSelect>
+```
+
+
+
+## `ToStringFunc`
+
+Je peux afficher le libelle de mes `MudSelectItem` de cette manière:
+
+```html
+<MudSelectItem Value="delai">@delai.Libelle</MudSelectItem>
+```
+
+<img src="assets/good-displaying-for-items-select.png" alt="good-displaying-for-items-select" />
+
+Ceci focntionne correctement sauf si grâce au composant `State` je change de composant puis je reviens :
+
+<img src="assets/strange-behavior-items-select-string.png" alt="strange-behavior-items-select-string" />
+
+J'ai un "bug" (un défaut ?) à l'affichage alors que la valeur est bien choisie dans la liste.
+
+Pour résoudre ce problème il suffit d'utiliser `ToStringFunc`:
+
+```html
+<MudSelect
+    // ...
+    ToStringFunc="d => d.Libelle"
+    // ...>
+
+    @foreach (var delai in _delais)
+    {
+        <MudSelectItem Value="delai"/>
+    }
+
+</MudSelect>
+```
+
+
+
 ## `MudSelect` et `FluentValidation`
 
 > Cette exemple ne fonctionne qu'avec un `MudSelect` simple (sans `MultiSelection`).
