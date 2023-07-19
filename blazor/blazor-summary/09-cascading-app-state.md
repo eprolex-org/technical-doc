@@ -1,4 +1,4 @@
-# 09 App `State`
+# 09 `cascading` App `State`
 
 On va utiliser les `CascadingValue` pour mettre en place un `state` pour toute l'application.
 
@@ -102,6 +102,56 @@ Bien entendu il n'est pas persistant aux rafraîchissements 🍸.
 
 
 
+## Problème avec les `List<object>`
+
+Si une class possède une collection:
+
+```cs
+public class Bot
+{
+    public string CodeName { get; init; }
+    public List<Weapon> MyWeapons { get; set; }
+}
+```
+
+Mon `state` sera réactif au changement de la valeur `CodeName`:
+
+```cs
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    private string _codeName = string.Empty;
+    
+    public  CodeName
+    {
+        get => _codeName;
+
+        set
+        {
+            _codeName = value;
+            StateHasChanged();
+        }
+    }
+}
+```
+
+Mais il n'est pas simple d'implémenter la même chose si un changement intervient sur la `List<Weapon>`.
+
+### Comment réagir à l'ajout d'un élément ?
+
+```cs
+// Quelque part
+bot.MyWeapons.Add(new Weapon());
+```
+
+
+
 ## Persistance à la navigation
 
 `HTML 5` implémente deux types de stockage dans le navigateur.
@@ -181,7 +231,7 @@ public class JsInteropConstants
 }
 ```
 
-> Un champs déclaré `const` est par déafut aussi `static`.
+> Un champs déclaré `const` est par défaut aussi `static`.
 
 On obtient donc :
 
