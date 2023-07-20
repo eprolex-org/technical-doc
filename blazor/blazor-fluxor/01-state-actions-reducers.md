@@ -161,6 +161,10 @@ public class App
 }
 ```
 
+L'`App` n'accède pas directement au `State` mais au `Feature<State>`.
+
+C'est un `Wrapper` autour du `State`, le rendant accessible via `Value` et proposant un gestionnaire d'événement `StateChanged`.
+
 On ajoute une méthode affichant le `State` dès que celui-ci est modifié:
 
 ```cs
@@ -279,6 +283,17 @@ public static class Reducers
 }
 ```
 
+ou plus simplement avec les `record`:
+```cs
+[ReducerMethod(typeof(IncrementCounterAction))]
+    public static CounterState ReduceIncrementCounterAction(CounterState state) 
+        => state with { ClickCount = state.ClickCount + 1 };
+```
+
+On utilise l'écriture simplifiée `[ReducerMethod(typeof(IncrementCounterAction))]` pour ne pas le passer inutilement en paramètre.
+
+
+
 > ## ! `IState<TState>` et `TState`
 >
 > Lorsqu'on utilise le `State` dans l'application, on utilise `IState<TState>` et du coup l'écriture avec `Value`:
@@ -325,4 +340,4 @@ Les `Reducers` doivent être créé dans des `static class` pour éviter toute i
 
 S'il y a un besoin d'utiliser des services tiers, c'est qu'il faut plutôt créer un `Effect`.
 
-<img src="assets/schema-simple-state-reducer-dispatch-exemple.png" alt="schema-simple-state-reducer-dispatch-exemple" />
+<img src="assets/new-schema-updated-normal-flux.png" alt="new-schema-updated-normal-flux" />
