@@ -232,7 +232,7 @@ Name: Roumouni, Gender: Female, Age: 26, Magical Type: Diamond
 <========================== Creature State
 ```
 
-<img src="assets/fluxoor-machine-schema-new.png" alt="fluxoor-machine-schema-new" />
+<img src="assets/other-new-name-fluxor-schema.png" alt="other-new-name-fluxor-schema" />
 
 
 

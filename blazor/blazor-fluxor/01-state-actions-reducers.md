@@ -184,6 +184,8 @@ private void CounterState_StateChanged(object sender, EventArgs e)
 
 Dans le dossier `Store` on va créer une classe représentant notre action.
 
+> Elle ne fait partie d'un `UseCase` dans la documentation mais est directement placée à la racine de `Store`.
+
 Cette classe peut rester vide.
 
 `IncrementCounterAction.cs`
