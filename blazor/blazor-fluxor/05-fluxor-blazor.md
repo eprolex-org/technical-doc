@@ -1,11 +1,55 @@
 # 05 Utilisation de `Fluxor` avec `Blazor`
 
+## Ajouter le `package`
+
+```bash
+dotnet add package Fluxor.Blazor.Web
+```
+
+Si on veut les outils `Chrome` de `Redux` :
+
+```bash
+dotnet add package Fluxor.Blazor.Web.ReduxDevTools
+```
+
+
+
+## Mise en place dans `Program.cs`
+
+```cs
+using Fluxor;
+
+// ...
+
+builder.Services.AddFluxor(options =>
+{
+ options
+   .ScanAssemblies(typeof(Program).Assembly)
+   .UseReduxDevTools();
+});
+```
+
+
+
 ## Initialiser le `Store`
 
 Il faut ajouter une balise spécial dans `App.razor`:
 
 ```html
 <Fluxor.Blazor.Web.StoreInitializer/>
+
+<Router AppAssembly="@typeof(App).Assembly">
+    // ...
+```
+
+Ou
+
+```ruby
+@using Fluxor.Blazor.Web
+```
+
+```html
+<StoreInitializer />
 
 <Router AppAssembly="@typeof(App).Assembly">
     // ...
