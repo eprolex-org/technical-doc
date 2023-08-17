@@ -43,6 +43,16 @@ brew services start rabbitmq
 brew services stop rabbitmq
 ```
 
+Pour vérifier que le `service` tourne :
+
+```bash
+brew services list
+```
+
+<img src="assets/show-if-service-is-running.png" alt="show-if-service-is-running" />
+
+
+
 Pour avoir les `infos` d'installation on tape :
 
 ```bash
