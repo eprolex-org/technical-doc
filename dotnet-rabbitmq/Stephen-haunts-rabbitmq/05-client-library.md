@@ -4,6 +4,14 @@ C'est une implémentation en `c#` de `AMQP` `0.9.1` avec quelques `abstractions`
 
 
 
+## Installation
+
+```bash
+dotnet add package RabbitMQ.Client
+```
+
+
+
 ## `Implémentation`
 
 ### `IModel`
