@@ -158,7 +158,7 @@ On supprime alors `[EffectMethod(...)]`.
 
 1. Un attribut `[EffectMethod]` peut être déclaré sur une méthode `static` ou d'`instance`.
 2. Si I'`Effect` est déclaré sur une méthode d'instance, la classe propriétaire sera aussi instanciée.
-3. Les dépendances injectées peuvent être partagées entre plusieurs `[EffectMethod]`, ils peuvent pat-rtagés par exemple une propriété `CancellationToken`.
+3. Les dépendances injectées peuvent être partagées entre plusieurs `[EffectMethod]`, ils peuvent partagés par exemple une propriété `CancellationToken`.
 
 ### La méthode `2` est conseillée
 

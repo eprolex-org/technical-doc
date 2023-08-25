@@ -149,7 +149,7 @@ public class App
     {
         _store = store;
         _counterState = counterState;
-        _counterState.StateChanged += CounetrState_StateChanged;
+        _counterState.StateChanged += CounterState_StateChanged;
     }
     
     public void Run()
@@ -184,7 +184,7 @@ private void CounterState_StateChanged(object sender, EventArgs e)
 
 Dans le dossier `Store` on va créer une classe représentant notre action.
 
-> Elle ne fait partie d'un `UseCase` dans la documentation mais est directement placée à la racine de `Store`.
+> Elle ne fait pas partie d'un `UseCase` dans la documentation mais est directement placée à la racine de `Store`.
 
 Cette classe peut rester vide.
 
@@ -267,7 +267,7 @@ public void Run()
 
 ## Réagir sur l'`Action` pour modifier le `State` : `Reducer`
 
-On va créer une nouvelles `class` dabs le même dossier `Stor/CounterUseCase`
+On va créer une nouvelles `class` dans le même dossier `Stor/CounterUseCase`
 
 `Reducers.cs`
 
