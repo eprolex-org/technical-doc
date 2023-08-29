@@ -267,6 +267,14 @@ public void Run()
 
 ## Réagir sur l'`Action` pour modifier le `State` : `Reducer`
 
+> ## ! à l'ordre des `arguments` : `state` puis `action`
+>
+> L'ordre des `arguments` compte.
+>
+> Si on place l'`action` avant le `state` on obtient une exception.
+
+
+
 On va créer une nouvelles `class` dans le même dossier `Stor/CounterUseCase`
 
 `Reducers.cs`

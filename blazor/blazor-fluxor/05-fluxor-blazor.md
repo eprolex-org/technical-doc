@@ -133,25 +133,14 @@ else
 }
 ```
 
+> ## ! `base.OnInitialized()` est obligatoire, sinon on a une `exception`.
+
 ### Règles à suivre
 
 1. Hériter de `FluxorComponent` :  `@inherits FluxorComponent`
 
-2. Utiliser `State.Value.IsLoading` :
-   ```ruby
-   @if (State.Value.IsLoading)
-   {
-       // ... loading
-   ```
+2. Injecter `IState` et `IDispatcher`
 
-3. Utiliser `State.Value.Employees`
-   ```ruby
-   @foreach (var employee in State.Value.Employees)
-   {
-       // ...
-   ```
-
-4. Injecter `IState` et `IDispatcher`
    ```cs
    [Inject]
    public IState<EmployeeState> State { get; set; } = default!;
@@ -161,6 +150,25 @@ else
    ```
 
    Ou avec `@inject` dans la partie `template`.
+
+   ```html
+   @inject IState<EmployeeState> State
+   @inject IDispatcher Dispatcher
+   ```
+
+3. Utiliser `State.Value.IsLoading` :
+   ```ruby
+   @if (State.Value.IsLoading)
+   {
+       // ... loading
+   ```
+
+4. Utiliser `State.Value.Employees`
+   ```ruby
+   @foreach (var employee in State.Value.Employees)
+   {
+       // ...
+   ```
 
 5. Utiliser `Dispatch`, si c'est dans `OnInitialized`, oublier `base.OnInitialized()` provoque une erreur.
    ```cs
