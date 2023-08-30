@@ -153,7 +153,7 @@ Je peux afficher le libelle de mes `MudSelectItem` de cette manière:
 
 <img src="assets/good-displaying-for-items-select.png" alt="good-displaying-for-items-select" />
 
-Ceci focntionne correctement sauf si grâce au composant `State` je change de composant puis je reviens :
+Ceci fonctionne correctement sauf si grâce au composant `State` je change de composant puis je reviens :
 
 <img src="assets/strange-behavior-items-select-string.png" alt="strange-behavior-items-select-string" />
 

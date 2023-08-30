@@ -109,6 +109,8 @@ new FetchCreatureResultAction(creatures)
 
 ### 2. En décorant des méthodes d'instance ou `static` :
 
+> ## ! L'ordre des arguments compte : `action` puis `dispatcher`
+
 ```cs
 public class Effects
 {
