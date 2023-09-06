@@ -74,15 +74,15 @@ Pour l'exemple une méta-donnée du dernier utilisateur a été ajouté, cette p
 > ```cs
 > foreach (var w in ListOfWeapon())
 > {
->     WriteLine(w);
+>    	WriteLine(w);
 > }
 > 
 > IEnumerable<string> ListOfWeapon()
 > {
->     yield return "Morning Star";
->     yield return "Black Sword";
->     yield return "Bone Arrow";
->     yield return "Blood Axe";
+>    	yield return "Morning Star";
+>    	yield return "Black Sword";
+>    	yield return "Bone Arrow";
+>    	yield return "Blood Axe";
 > }
 > ```
 >
