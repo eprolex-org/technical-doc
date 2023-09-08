@@ -55,3 +55,13 @@ public static T DeepClone<T>(this T source) where T : class
 }
 ```
 
+> Version en une ligne un peu soufflée par `Tabnine`
+>
+> ```cs
+> static class CloningExtensions
+> {
+>     public static T Clone<T>(this T obj) where T : class
+>         =>  JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(obj))
+>             ?? throw new Exception("Failed to clone object");  
+> }
+> ```
