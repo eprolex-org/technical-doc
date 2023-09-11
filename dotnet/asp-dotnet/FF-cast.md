@@ -89,6 +89,8 @@ if(StaticObject.Hukar is Person hukar)
 
 C'est la façon la plus sûre de procéder.
 
+Retourne `false` si l'objet testé est `null` (si le retour de l'expression est `null`).
+
 
 
 ## Test de performance : `BenchmarkDotnet`
