@@ -1,13 +1,11 @@
-# 14 `GetHashCode`
+# 14 `Equals` et  `GetHashCode`
 
-Lorsqu'on `override` la méthode `Equals`, on doit faire correspondre la méthode `GetHashCode`pour que celle-ci puisse retrouver l'objet sur les mêmes critères que l'égalité.
-
-
+# `Equals`
 
 ## Point de départ
 
 ```cs
-public class VotreClasse
+public class EnumerationClasse
 {
     public string Propriete1 { get; set; }
     public string Propriete2 { get; set; }
@@ -15,7 +13,7 @@ public class VotreClasse
 
     public override bool Equals(object obj)
     {
-        if (obj is VotreClasse autre)
+        if (obj is EnumerationClasse autre)
         {
             return Propriete1 == autre.Propriete1 &&
                    Propriete2 == autre.Propriete2 &&
@@ -27,7 +25,81 @@ public class VotreClasse
 
 Notre égalité est basée sur la valeur des trois propriété, on doit faire correspondre `GetHashCode`
 
+> ## Version minimaliste de `Equals`
+>
+> ```cs
+> public override bool Equals(object obj)
+>     => obj is EnumerationClasse autre &&
+>         Propriete1 == autre.Propriete1 &&
+>         Propriete2 == autre.Propriete2 &&
+>         Propriete3 == autre.Propriete3;
+> ```
+>
+> 
 
+
+
+## `IEquatable<T>` et `Equals(T obj)`
+
+Lors d'un test avec un objet de même type, `Equals(T)` offre de meilleur performance que `Equals(object)`. 
+
+La raison en est qu'il n'y a pas besoin de` test` et de `cast` sur le deuxième élément.
+
+```cs
+public bool Equals(EnumerationClasse? other)
+{
+    if (ReferenceEquals(null, other)) return false; // 1
+    if (ReferenceEquals(this, other)) return true; // 2
+    
+    return  Propriete1 == autre.Propriete1 && // 3
+            Propriete2 == autre.Propriete2 &&
+            Propriete3 == autre.Propriete3;
+}
+```
+
+1. Si le deuxième élément est `null` on retourne `false`
+2. si le deuxième élément est moi-même on retourne `true`
+3. On regarde l'égalité de chaque propriété entrant dans l'égalité
+
+On doit maintenant `override` `Equals(object)`:
+
+```cs
+public override bool Equals(object? obj)
+        =>  ReferenceEquals(this, obj) || 
+    		obj is EnumerationClasse other && Equals(other);
+```
+
+
+
+## `==` et `!=`
+
+On peut vouloir surcharger ces opérateurs pour les rendre cohérents avec `Equals`.
+
+```cs
+public static bool operator ==(EnumerationLibelle left, EnumerationLibelle right)
+    => left is not null && left.Equals(right);
+
+public static bool operator!=(EnumerationLibelle left, EnumerationLibelle right)
+    =>!(left == right);
+```
+
+Si `left` est `null`, la comparaison `left is not null` renvoie `false`.
+
+Si `right` est `null`, `left.Equals(right)` retourne `false` à sa première ligne :
+
+```cs
+public bool Equals(EnumerationClasse? other)
+{
+    if (ReferenceEquals(null, other)) return false;
+```
+
+
+
+
+
+# `GetHashCode`
+
+Lorsqu'on `override` la méthode `Equals`, on doit faire correspondre la méthode `GetHashCode`pour que celle-ci puisse retrouver l'objet sur les mêmes critères que l'égalité.
 
 ## Le plus simple : `Combine`
 
@@ -47,7 +119,7 @@ La méthode s'occupe de gérer les valeurs `null` et garantie une distribution c
 ```cs
 public override int GetHashCode()
 {
-    return (Code, LibelleFr, LibelleNl, LibelleDe).GetHashCode();
+    return (Propriete1, Propriete2, Propriete3).GetHashCode();
 }
 ```
 

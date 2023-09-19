@@ -4,6 +4,12 @@ Cette classe permet d'avoir à la fois une valeur numérique `Value` et une vale
 
 
 
+## Ma version pour `Eprolex`
+
+
+
+
+
 ## Version simplifiée de Steve Smith
 
 ```cs
