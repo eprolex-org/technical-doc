@@ -103,6 +103,25 @@ En créant une méthode gérant l'appelle aux `EventCallback` passées en argume
 
 <img src="assets/inheritance-event-passing.png" alt="inheritance-event-passing" style="zoom:50%;" />
 
+```ruby
+@inherits MyBaseComponent
+
+@{ base.BuildRenderTree(__builder); }
+
+@code {
+    protected override Task OnClickHandler(MouseEventArgs ev)
+    {
+        Console.WriteLine("Ajout de logique ...");
+        
+        return base.OnClickHandler(ev);
+    }
+}
+```
+
+
+
+
+
 On a ainsi enrichi le comportement du `Base Component`:
 
 <img src="assets/base-and-derived-button-behavior.png" alt="base-and-derived-button-behavior" style="zoom:50%;" />
