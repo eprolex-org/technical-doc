@@ -2,6 +2,37 @@
 
 
 
+## Résumé simples d'`event` normaux et `asynchrone`
+
+```cs
+public class SaveFormEvent
+{
+    public delegate Task SaveFormEventHandler();
+    public event SaveFormEventHandler? SavedForm;
+
+    public async Task OnSavedForm()
+    {
+        if (SavedForm is not null) await SavedForm.Invoke();
+    }
+}
+```
+
+Si l'`event` n'était pas `async` on aurai:
+
+```cs
+public class SaveFormEvent
+{
+    public delegate void SaveFormEventHandler();
+    public event SaveFormEventHandler? SavedForm;
+
+    public void OnSavedForm() => SavedForm?.Invoke();
+}
+```
+
+
+
+
+
 ## `Delegate`
 
 > ## `Invoke`
@@ -477,3 +508,6 @@ On a ici limité le nombre de `delegate` à `1`.
 Un `event` dans une `interface` ne promet que d'avoir `add` et `remove` implémenté.
 
 Que ce soit auto-implémenté ou manuellement implémenté.
+
+
+
