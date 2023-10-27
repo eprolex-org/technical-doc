@@ -9,7 +9,7 @@
 Cette `Exception` a lieu lorsqu'une collection est modifiée par une méthode pendant qu'en même temps une autre méthode itère dessus.
 
 ```cs
-private static ImmutableList<DemandeAvis> _demandesAvis = new() { ... };
+private static List<DemandeAvis> _demandesAvis = new() { ... };
 ```
 
 
