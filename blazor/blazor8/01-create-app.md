@@ -8,7 +8,7 @@ dotnet new blazor -o BlazorApp
 
 Par défaut l'`interactivity` est `server`
 
-On peut préférer `-int WebAssembly` ou rester en `SSR` avec `int none`.
+On peut préférer `-int WebAssembly` ou rester en `SSR` avec `-int none`.
 
 On peut aussi vouloir le mode hybride `Auto` :
 

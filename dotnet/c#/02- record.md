@@ -15,3 +15,14 @@ public record DtoBase (
 ```
 
 Plus rapide à écrire qu'une classe.
+
+## Héritage
+
+```cs
+public record Fruit(Color Color);
+
+public record Orange(Color Color) : Fruit(Color);
+
+public record Banana() : Fruit(Color.Yellow);
+```
+
