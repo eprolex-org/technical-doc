@@ -66,6 +66,32 @@ On utilise toujours le `when` pour ajouter une condition.
 
 
 
+## Capturer le résultat du `matching`
+
+On peut déclarer une variable pour recevoir le résultat du matching :
+
+### Je ne capture pas le résultat
+
+```cs
+var result = fruit switch
+{
+    Orange { WeightInGrams: <70 and >50, Color: Color.Orange } => "I'm a calibrate orange orange",
+    Orange => "I'm an orange",
+```
+
+### Je capture le résultat
+
+```cs
+var result = fruit switch
+    {
+        Orange { WeightInGrams: <70 and >50, Color: Color.Orange } result => $"I'm a calibrate orange orange {result.Brand}",
+        Orange result => $"I'm an orange {result.Brand}",
+```
+
+Cela dépend si on a besoin des valeurs de l'élément matché pour le retour.
+
+
+
 ## Les `Patterns` en `c#`
 
 ### `Type` pattern
@@ -176,11 +202,37 @@ Avec deux `Property` :
 ```cs
 var result = fruit switch
 {
-    Orange { WeightInGrams: <70 and >50, Color: Color.Orange } => "I'm a calibrate orange orange",
+    Orange { WeightInGrams: <70 and >50, Color: Color.Orange } 
+        => "I'm a calibrate orange orange",
     Orange => "I'm an orange",
     _ => $"I'm some other fruit or null"
 };
 ```
+
+On peut aussi utiliser la `Property` seule :
+
+```cs
+var result = fruit switch
+{
+    { WeightInGrams: <70 and >50, Color: Color.Orange } f 
+        => $"I'm a calibrate fruit orange {f.Brand}",
+```
+
+Ici on ne déclare pas le type.
+
+### `if (result is { })`
+
+`{ }` match avec une `instance`.
+
+Dans un `switch` on écrira :
+
+```cs
+var result = fruit switch
+{
+        { } => "It's an instance",
+```
+
+
 
 
 
@@ -193,6 +245,34 @@ var result = fruit switch
 
 
 ### `List` pattern
+
+```cs
+string[] payloads = [ "orange", "banana", "cherry", "ananas" ];
+```
+
+```cs
+// list pattern
+if(payloads is ["orange", ..]) 
+    Console.WriteLine("first element is orange");
+```
+
+```
+first element is orange
+```
+
+---
+
+```cs
+// slice pattern
+if(payloads is ["orange", _, .. var slice]) 
+    Console.WriteLine($"slice element one {slice[0]}");
+```
+
+```
+slice element one cherry
+```
+
+
 
 
 
