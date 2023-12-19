@@ -15,14 +15,14 @@ On voit l'icône dans la barre d'outils en haut.
 ## Installer le conteneur `mssql`
 
 ```bash
-docker pull mcr.microsoft.com/mssql/server:2019-latest
+sudo docker pull mcr.microsoft.com/mssql/server:2022-latest
 ```
 
 ```bash
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=huk@r2Xmen99" \
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=huk@r2Xmen99" \
    -p 1433:1433 --name sql_dotnet1 -h sql_dotnet_host1 \
    -v ~/Documents/SQLMount:/SQLMount\
-   -d mcr.microsoft.com/mssql/server:2019-latest
+   -d mcr.microsoft.com/mssql/server:2022-latest
    
 80daa936f098a6dd5f8409d198f503371886395ada4d051def1dbc8df5dde649
 ```
@@ -37,7 +37,9 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=huk@r2Xmen99" \
 
 ​	 `"ACCEPT_EULA=Y"` accepte la licence
 
-​	`"SA_PASSWORD=huk@r2Xmen99"` : `S`ql `A`dmin = `SA` configure le mot de passe administrateur
+`"MSSQL_SA_PASSWORD=huk@r2Xmen99"` : `S`ql `A`dmin = `SA` configure le mot de passe administrateur
+
+> Déprécié :	`"SA_PASSWORD=huk@r2Xmen99"` : `S`ql `A`dmin = `SA` configure le mot de passe administrateur
 
 `-v` on monte un volume où `SQL Server` : `~/Documents/SQLMount:/SQLMount` 
 
