@@ -14,4 +14,4 @@ On voit que malgré la mise à jour de liste, l'affichage des données n'est pas
 
 ## `@key` la solution
 
-???
+Pour un problème de mise à jour d'une liste (dans Eprolex), l'utilisation de `@key` résout le problème.
