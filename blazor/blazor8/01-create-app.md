@@ -22,6 +22,10 @@ Si on veut définir l'`interactivity` pour l'`App` entière on utilise `-ai | --
 
 Pour avoir un `template` vide `-e`.
 
+```bash
+dotnet new blazor -e -o BlaorRazorClassLibrary -int server -ai
+```
+
 
 
 ## Le modèle `Auto`
