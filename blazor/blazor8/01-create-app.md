@@ -23,7 +23,7 @@ Si on veut définir l'`interactivity` pour l'`App` entière on utilise `-ai | --
 Pour avoir un `template` vide `-e`.
 
 ```bash
-dotnet new blazor -e -o BlaorRazorClassLibrary -int server -ai
+dotnet new blazor -e -o BlazorApp -int server -ai
 ```
 
 
@@ -33,3 +33,12 @@ dotnet new blazor -e -o BlaorRazorClassLibrary -int server -ai
 La `solution` se compose de deux projet un `server` et un `webassembly` appelé `Client`.
 
 <img src="assets/new-blazor-web-app-solution.png" alt="new-blazor-web-app-solution" />
+
+
+
+
+
+
+
+
+
