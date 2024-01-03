@@ -19,6 +19,16 @@ dotnet add package mudblazor
 
 
 
+### `_Imports.razor`
+
+```ruby
+@using MudBlazor
+```
+
+
+
+
+
 ### `MainLayout.razor`
 
 ```ruby
