@@ -1,5 +1,15 @@
 # 06 `HttpClient`
 
+# `Server`
+
+
+
+
+
+
+
+# `WebAssembly`
+
 ## Poster des données : `PostAsJsonAsync`
 
 ### Dans la `page` : `MyPage.razor`

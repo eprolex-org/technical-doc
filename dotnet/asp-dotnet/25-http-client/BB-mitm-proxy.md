@@ -24,7 +24,7 @@ mitmweb
 
 ## Le `Proxy` de `HttpClient`
 
-Pour que cela focntionne et que les requêtes de `HttpClient` soient interceptées il faut maintenant régler le `proxy` dans l'application:
+Pour que cela fonctionne et que les requêtes de `HttpClient` soient interceptées il faut maintenant régler le `proxy` dans l'application:
 
 ```cs
 var proxy = new WebProxy
