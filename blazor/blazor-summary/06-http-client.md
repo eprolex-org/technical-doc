@@ -2,7 +2,79 @@
 
 # `Server`
 
+## Dans `Program.cs`
 
+```cs
+builder.Services.AddHttpClient(
+    "eprolexapi", 
+    client => client.BaseAddress = new Uri("http://localhost:8080")
+);
+```
+
+On utilise un client nommé pour pouvoir donner une valeur à certaines propriétés du client, ici l'adresse de base.
+
+<img src="assets/properties-http-client-access.png" alt="properties-http-client-access" />
+
+
+
+## Utilisation dans un `Repository` : `CreateClient`
+
+```cs
+public class DelegueRepository(IHttpClientFactory clientFactory) : IDelegueRepository
+{
+    public async Task<IEnumerable<Delegue>> GetForDemandeAvis(int demandeAvisId)
+    {
+        var httpClient = clientFactory.CreateClient("eprolexapi");
+
+        return await httpClient.GetFromJsonAsync<IEnumerable<Delegue>>(
+            $"demande-avis/{demandeAvisId}/delegue"
+        ) ?? [];
+    }
+
+    public async Task Create(Delegue delegueToCreate)
+    {
+        var httpClient = clientFactory.CreateClient("eprolexapi");
+        
+        var response = await httpClient.PostAsJsonAsync(
+            $"demande-avis/{delegueToCreate.DemandeAvisId}/delegue",
+            delegueToCreate
+        );
+        
+        var newDelegue = await response.Content.ReadFromJsonAsync<Delegue>();
+        
+        if(newDelegue is null) 
+            throw new CreateDelegueException("Delegue not created");
+    }
+
+    public async Task Update(int DemandeAvisId, Delegue delegueToUpdate)
+    {
+        var httpClient = clientFactory.CreateClient("eprolexapi");
+        
+        await httpClient.PutAsJsonAsync(
+            $"demande-avis/{DemandeAvisId}/delegue/{delegueToUpdate.Id}", 
+            delegueToUpdate
+        );
+    }
+
+    public async Task Delete(int DemandeAvisId, int delegueToDeleteId)
+    {
+  		var httpClient = clientFactory.CreateClient("eprolexapi");
+        
+        await httpClient.DeleteAsync(
+            $"demande-avis/{DemandeAvisId}/delegue/{delegueToDeleteId}"
+        );
+    }
+}
+```
+
+Pour utiliser les méthodes `GetFromJsonAsync`, `PostAsJsonAsync`, `ReadFromJsonAsync` et `PutAsJsonAsync`, il faut la bibliothèque :`System.Net.Http.Json`
+
+`GlobalUsings.cs`
+
+```cs
+// ...
+global using System.Net.Http.Json;
+```
 
 
 
