@@ -1,0 +1,54 @@
+# 01 Déploiement d'une application Blazor Server
+
+## Mémoire nécessaire pour `SignalR`
+
+Chiffre pour `.net core 3` :
+
+1 CPU 3.5 GB RAM => 5000 concurrent users
+
+4 CPU 14GB RAM => 20 000 concurrent users
+
+
+
+## Installer le bon `Runtime`
+
+Il faut le `Windows Hosting Bundle Installer`.
+
+<img src="assets/hosting-bundle-for-iis.png" alt="hosting-bundle-for-iis" />
+
+Ce package installe le `runtime` pour `IIS`.
+
+> On peut vérifier l'installation dans `IIS` en cliquant sur la section `Modules`
+>
+> <img src="assets/modules-section-to-click.png" alt="modules-section-to-click" />
+
+
+
+## Publier l'application
+
+```bash
+dotnet publish -c Release
+```
+
+On trouve le contenu de l'application dans le dossier `/bin/Release/{TARGET FRAMEWORK}/publish`.
+
+On peut choisir le dossier avec `--output -o` :
+
+```bash
+dotnet publish -c Release -o MyPublishFolder
+```
+
+
+
+## Modifier le port sur `IIS`
+
+Click droit sur le site
+
+On modifie le port du site par défaut.
+
+
+
+## Créer un site
+
+Pointer sur le dossier `Publish`.
+
