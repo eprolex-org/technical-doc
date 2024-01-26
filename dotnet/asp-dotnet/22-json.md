@@ -94,6 +94,17 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 );
 ```
 
+Ou dans une `Minimal Api` :
+
+```cs
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycle;
+});
+```
+
+> le résultat avec `Preserve` est étrange remplie de `$Id` ???
+
 
 
 ### Deuxième solution : avec `Newtonsoft`
