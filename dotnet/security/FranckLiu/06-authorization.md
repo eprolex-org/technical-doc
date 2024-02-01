@@ -36,6 +36,14 @@ Les `AuthorisationHandler` sont alors utilisés par `AuthorisationService`.
 
 Il existe plusieurs `AuthorisationHandler` générique déjà fournis.
 
+Au final un `requirement` va
+
+- `grant access` : donner l'accés
+
+- `deny access` : refuser l'accés
+
+à une `page`.
+
 
 
 ## Empécher les accès anonymes
@@ -81,6 +89,8 @@ En allant à la page `Index` on a bien cette redirection :
 
 
 > ### Obligation du `middleware` : `Authorisation`
+>
+> Ce `middleware` n'est pas ajouter implicitement.
 >
 > Si on désactive `Authorization` :
 >

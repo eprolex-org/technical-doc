@@ -18,12 +18,14 @@ app.UseRouting();
 app.UseAuthentication();
 //app.UseAuthorization();
 
-app.UseEndpoints(endpoints => {
-    endpoints.MapRazorPages();
-});
+app.MapRazorPages();
 ```
 
 <img src="assets/is-auth-true-very-good.png" alt="is-auth-true-very-good" style="zoom:33%;" />
+
+> Ce n'est pas la peine d'ajouter explicitement `UseAuthentication`, ce `middleware` est automatiquement ajouté lorsque `builder.Build()` s'exécute.
+>
+> Voire cette discussion : https://github.com/dotnet/aspnetcore/issues/48469
 
 
 
@@ -40,30 +42,4 @@ Je récupère dans l'objet `User.Identity` les `Claims` définies dans le `Cooki
 <img src="assets/user-identity-from-cookie-deserialized-decrypted.png" alt="user-identity-from-cookie-deserialized-decrypted" style="zoom:33%;" />
 
 
-
-## Remarque
-
-Si j'ajoute le service d'`Authentication` de cette manière :
-
-```cs
-services.AddAuthentication().AddCookie("MyCookieAuth", options => {
-    options.Cookie.Name = "MyCookieAuth";
-});
-```
-
-Je me retrouve de nouveau avec :
-
-```cs
-IsAuthenticated: false
-```
-
-C'est parcequ'on ne dit pas au middleware `Authentication` quel type de `scheme` il doit utiliser.
-
-Il suffit de lui passer le nom du `scheme` pour que cela fonctionne :
-
-```cs
-services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options => {
-    options.Cookie.Name = "MyCookieAuth";
-});
-```
 

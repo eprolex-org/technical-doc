@@ -97,6 +97,9 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 Ou dans une `Minimal Api` :
 
 ```cs
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;
+
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycle;
@@ -104,6 +107,8 @@ builder.Services.Configure<JsonOptions>(options =>
 ```
 
 > le résultat avec `Preserve` est étrange remplie de `$Id` ???
+>
+> #### ! Ne pas utiliser le namespace : `Microsoft.AspNetCore.Mvc.Json`
 
 
 

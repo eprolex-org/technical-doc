@@ -7,36 +7,29 @@ Dans la méthode `OnPost` de la `Razor Page` `Login.cshtml.cs`
 ```cs
 public async Task<IActionResult> OnPostAsync()
 {
-    if(!ModelState.IsValid)
-    {
-        // renvoie la même page
-        return Page();
-    }
+    // renvoie sur la même page
+    if (!ModelState.IsValid) return Page();
 
-    // Verify Credential
-    if(Credential.UserName == "admin" && Credential.Password == "password")
-    {
-        // Creating the security context
-        var claims = new List<Claim> {
-            new Claim(ClaimType.Name, "admin"),
-            new Claim(ClaimType.Email, "admin@website.be")
-        };
-        var identity = new ClaimsIdentity(claims, "MyCookieAuth");
-        
-        ClaimPrincipal claimPrincipal = new ClaimPrincipal(identity);
-        
-        await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
-        
-        return RedirectPage("/Index");
-    }
-    
-    return Page();
+    if (Credential is not { UserName: "admin", Password: "password" }) return Page();
+
+    // défini le context de sécurité
+    List<Claim> claims =
+    [
+        new Claim(ClaimTypes.Name, "admin"),
+        new Claim(ClaimTypes.Email, "admin@gmail.com")
+    ];
+
+    var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+    var user = new ClaimsPrincipal(identity);
+
+    await HttpContext.SignInAsync("MyCookieAuth", user);
+
+    return RedirectToPage("/Index");
+
 }
 ```
 
-On crée des `Claims` (proclamations !?), on les passe à une `Identity` basée dessus et on lui donne un nom `"MyCookieAuth"`.
-
-
+On crée des `Claims` (déclarations), on les passe à une `Identity` et on lui donne un nom (`authenticationType`) `"MyCookieAuth"` (qui est identique à `authenticationScheme`).
 
 Ensuite on construit le `ClaimsPrincipal` avec cette `Identity`.
 
@@ -46,7 +39,9 @@ Ensuite on construit le `ClaimsPrincipal` avec cette `Identity`.
 >
 > <img src="assets/claim-principal-add-identity-bve.png" alt="claim-principal-add-identity-bve" style="zoom:33%;" />
 
-`SignInasync` persiste le `ClaimsPrincipal` sous la forme d'un `Cookie` :
+`SignInAsync` va utiliser (et donc a besoin) d'un gestionnaire d'`authentification` (`authentication handler`).
+
+`SignInAsync` persiste le `ClaimsPrincipal` sous la forme d'un `Cookie` :
 
 - Il serialize le `ClaimsPrincipal` en `string`
 - Il l'encrypte
@@ -64,7 +59,8 @@ Ensuite on construit le `ClaimsPrincipal` avec cette `Identity`.
 Il faut injecter le `authentication handler` dans le conteneur de services :
 
 ```cs
-services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
   {
       options.Cookie.Name = "MyCookieAuth";
   });
@@ -103,6 +99,41 @@ CookieAuthenticationHandler
 On vient de mettre au point le `Security Context` à l'aide d'un `Cookie` :
 
 <img src="assets/security-context-do-first-card.png" alt="security-context-do-first-card" style="zoom:50%;" />
+
+
+
+## Créer un classe `Auth` contenant les constantes d'authentification
+
+Plutôt que d'avoir en littéral un peu partout l'`authenticationScheme` et `authenticationType` (qui a la même valeur), on peut rationaliser cela avec une classe encapsulant les constantes :
+
+```cs
+public static class Auth
+{
+    public const string CookieAuthScheme = "MyCookieAuth";
+}
+```
+
+et du coup :
+
+`Program.cs`
+
+```cs
+builder.Services.AddAuthentication()
+    .AddCookie(Auth.CookieAuthScheme, options =>
+    {
+        options.Cookie.Name = Auth.CookieAuthScheme;
+    });
+```
+
+et dans `Login.cshtml.cs`
+
+```cs
+// ici c'est authenticationType qui prend la valeur d'authenticationScheme
+var identity = new ClaimsIdentity(claims, Auth.CookieAuthScheme);
+var user = new ClaimsPrincipal(identity);
+
+await HttpContext.SignInAsync(Auth.CookieAuthScheme, user);
+```
 
 
 

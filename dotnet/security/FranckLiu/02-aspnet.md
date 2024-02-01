@@ -10,7 +10,7 @@ On a ici le `pipeline` des `middleware`. (voire pattern `chain of responsabiliti
 
 L'objet `HttpContext` encapsule `HttpRequest` et `HttpResponse`.
 
-Les `middlewares` sont concernés par toutes les requêtes, alors que les `filtres` eux ne sont concernés que dans certains cas.
+Les `middlewares` sont concernés par toutes les requêtes, alors que les `filtres` eux ne sont concernés que dans certains cas spécifiques.
 
 > Les filtres sont le pipeline de la partie `mvc`, il dispose d'un contexte ayant accès au `model` des données (après le `binding`).
 
@@ -23,14 +23,8 @@ Il passe le `HttpContext` à `next()` .
 Il est traversé à l'aller et au retour.
 
 ```cs
-public class CustomMiddleware
+public class CustomMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public CustomMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -42,7 +36,7 @@ public class CustomMiddleware
     }
 }
 
-// ON CRÉÉ UNE M2THODE D'EXTENSION
+// ON CRÉÉ UNE MÉTHODE D'EXTENSION
 
 public static class CustomMiddlewareExtensions
 {
@@ -135,7 +129,9 @@ C'est pourquoi le `login` (`authentification`) est plutôt un `middleware` tandi
 
 ## Security Context
 
-Ce sont toutes les informations concernant un utilisateur du système réunis dans un objet `SecurityContext`.
+Ce sont toutes les informations concernant un utilisateur du système réunis dans un objet `ClaimsPrincipal`.
+
+`ClaimsPrincipal` représente l'utilisateur de l'application.
 
 On a un objet `Principal` représentant un utilisateur et plusieurs `identities` (`étudiant`, `employé`, `utilisateur bibliothèque`) qui représente toutes les cartes que l'on peut avoir.
 
@@ -167,7 +163,7 @@ Chaque `Identity` à son tour contient des `Claims`.
 
 
 
-### `Identity` par défaut
+### `Identity` anonyme par défaut
 
 L'objet `User` possède une identité anonyme : `Identity`.
 

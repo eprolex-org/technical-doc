@@ -14,6 +14,7 @@ Ajoutons d'abord un `claim` régulant l'accès à une pays :
 
 ```cs
 var authType = "Passport";
+var authScheme = "cookie";
 
 app.MapGet("/login", async (HttpContext ctx) => {
     List<Claim> claims = [
@@ -29,6 +30,10 @@ app.MapGet("/login", async (HttpContext ctx) => {
     return "ok";
 });
 ```
+
+> `authenticationScheme` est un identifiant unique permettant de différencier un `middleware` d'authentification d'un autre. On peut lui donner la valeur qu'on veut.
+>
+> `authenticationType` est le nom de l'`identity`.
 
 Le deuxième argument du constructeur `ClaimsIdentity` est `authenticationType`, le type de la carte d'identification en quelque sorte, ici je donne la valeur `"Passport"`.
 

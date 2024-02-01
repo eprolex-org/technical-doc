@@ -1,7 +1,5 @@
 # 07 `Policy`
 
-
-
 ## Page `Human Resource`
 
 ```cs
@@ -38,6 +36,12 @@ services.AddAuthorization(options => {
 On place maintenant la `Policy` sur la page :
 
 ```cs
+[Authorize(policy: "MustBelongToHRDepartment")]
+```
+
+ou
+
+```cs
 [Authorize(Policy = "MustBelongToHRDepartment")]
 public class HumanResource : PageModel
 {
@@ -57,7 +61,7 @@ var claims = new List<Claim> {
     new Claim(ClaimTypes.Name, "admin"),
     new Claim(ClaimTypes.Email, "admin@mywebsite.com"),
     new Claim("Popotin", "fefessse"),
-    new Claim("Department", "HR") // <=
+    new Claim("Department", "HR") // <- ici
 };
 
 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
