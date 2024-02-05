@@ -136,9 +136,10 @@ services.AddAuthorization(options => {
     // ...
     options.AddPolicy("OnlyAdminIct", policy => {
         policy.RequireClaim("Department", "ICT")
-            .RequireClaim("IctRole", "Admin")
+            .RequireClaim("Admin") // new Claim("Admin", "true")
             .requireClaim("Localisation", "BXL");
     });
 });
 ```
 
+La relation entre deux `RequireClaim` et un `AND` logique.

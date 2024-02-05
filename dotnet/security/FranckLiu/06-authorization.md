@@ -57,6 +57,8 @@ public class IndexModel : PageModel
     // ...
 ```
 
+L'attribut `[Authorize]` empêche les `Identity` `Anonymous` d'accéder à la page (la ressource).
+
 Si l'`Attribute` : `[Authorize]` est mis sur une page, un utilisateur non identifié (`Authenticated`) sera automatiquement redirigé vers la page de `Login` :
 
 <img src="assets/auto-redirect-login-page.png" alt="auto-redirect-login-page" style="zoom:25%;" />
