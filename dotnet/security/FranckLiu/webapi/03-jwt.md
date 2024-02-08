@@ -1,6 +1,6 @@
 # 03 Jason Web Token `JWT`
 
-Un `token` est un `string` qui peut être transporté par la `requête` at par la `réponse`.
+Un `token` est un `string` qui peut être transporté par la `requête` et par la `réponse`.
 
 
 
