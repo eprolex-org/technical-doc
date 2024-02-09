@@ -51,7 +51,7 @@ private static string CreateToken(
     IConfiguration configuration
 )
 {
-    // On transforme la secret key en tableau de byte
+    // On transforme la "secret key" en tableau de byte
     var secretKey = Encoding.UTF8.GetBytes(configuration["SecretKey"] ?? "");
 
     // On crée le token
