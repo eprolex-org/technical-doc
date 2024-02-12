@@ -68,3 +68,18 @@ Le `service` doit aussi vérifier le temps de validité du `token` avec `Validat
 > ```
 >
 > 
+
+
+
+## Récupérer des données.                            `Authorization: bearer eyJh...`
+
+Le `JWT Token` est placé dans les `Headers` :
+
+```http
+GET http://localhost:5192/weatherforecast
+Accept: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImFkbWluIiwiUm9sZSI6IiIsIm5iZiI6MTcwNzQ3MTMzNywiZXhwIjoxNzA3NDcxOTM3fQ.r7v7EiaOShqPwPQooyyV1y4tmEZBeBnzD9cQSDgEvaY
+
+```
+
+Il y a juste un espace entre `bearer` et le `token`, pas un saut de ligne.
