@@ -15,6 +15,7 @@ builder.Services.AddSession(options =>
 {
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.Name = "MySessionCookie";
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
 ```
@@ -36,5 +37,67 @@ app.UseAuthorization();
 app.UseSession(); // <- ici
 
 app.MapRazorPages();
+```
+
+
+
+## Utilisation dans une page
+
+`Weather.cshtml.cs`
+
+```cs
+public class Weather(IHttpClientFactory factory) : PageModel
+{
+    [BindProperty] public List<WeatherDto> WeatherItems { get; set; } = [];
+
+    public async Task OnGetAsync()
+    {
+        JwtToken token = new();
+
+        var tokenSessionStr = HttpContext.Session.GetString("access_token");
+
+        token = string.IsNullOrEmpty(tokenSessionStr)
+            ? await Authenticate()
+            : JsonSerializer.Deserialize<JwtToken>(tokenSessionStr) ?? new JwtToken();
+
+        if (token.AccessToken == string.Empty || token.ExpireAt <= DateTime.Now)
+            token = await Authenticate();
+
+        var client = factory.CreateClient(MyHttpClient.ClientWebApi);
+        
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            token.AccessToken);
+        
+        WeatherItems = await client.GetFromJsonAsync<List<WeatherDto>>("/weatherforecast") ?? [];
+    }
+```
+
+La `session` est accessible via `HtpContext.Session`.
+
+Si le `token` trouvé dans la `session` est `null` ou vide, on s'identifie et on reçoit un nouveau `token` avec `await Authenticate` sinon on le déserialize.
+
+```cs
+private async Task<JwtToken> Authenticate()
+    {
+     	var client = factory.CreateClient(MyHttpClient.ClientWebApi);
+
+        var response = await client.PostAsJsonAsync(
+            "/auth",
+            new Credential
+            {
+                UserName = "admin",
+                Password = "password",
+                Department = "HR"
+            });
+
+        response.EnsureSuccessStatusCode();
+
+        var tokenString = await response.Content.ReadAsStringAsync();
+
+        HttpContext.Session.SetString("token_access", tokenString);
+
+        return JsonSerializer.Deserialize<JwtToken>(tokenString) ?? new JwtToken();
+    }
 ```
 
