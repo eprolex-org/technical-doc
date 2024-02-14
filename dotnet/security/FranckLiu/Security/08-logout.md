@@ -104,8 +104,13 @@ app.MapGet("/deletecookie", (HttpContext context) =>
 });
 ```
 
-<img src="assets/cookie-disappear-api-order.png" alt="cookie-disappear-api-order" />
+<img src="assets/cookie-disappear-api-order.png" alt="cookie-disappear-api-order" style="zoom: 67%;" />
 
 Et si on regarde le `Header` de la `Response` :
 
-<img src="assets/homemade-delete-cookie.png" alt="homemade-delete-cookie" />
+<img src="assets/homemade-delete-cookie.png" alt="homemade-delete-cookie" style="zoom: 67%;" />
+
+
+
+
+
