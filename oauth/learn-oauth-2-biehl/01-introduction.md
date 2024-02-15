@@ -40,9 +40,11 @@ Le `resource server` va à son tour contacter le `OAuth server` pour savoir si l
 
 <img src="assets/oauth-server-tiers-resources-app.png" alt="oauth-server-tiers-resources-app" />
 
+> `OAuth 2.0` est un standard qui permet de déléguer l'accès aux `resources` via le protocole `HTTP`.
 
+> Un `token` représente un droit d'accès spécifique sur une partie des données et seulement valide pour une courte période.
 
-
+Seul le `OAuth Server` connait les `crédentials`.
 
 
 
