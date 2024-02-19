@@ -68,7 +68,7 @@ builder.Services.AddCors();
 
 app.UseCors(policy => 
     policy.WithOrigins("http://localhost:5135")
-    .AllowAnyMethod();
+    .AllowAnyMethod());
 ```
 
 Pour les verbes `POST` et `PUT` envoyant des données on doit ajouter :

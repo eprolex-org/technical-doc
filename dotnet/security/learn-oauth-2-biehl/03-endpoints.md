@@ -1,6 +1,6 @@
 # 03. Les `Endpoints` de `OAuth`
 
-> `Grant` dans le contexte de `OAuth` doit être compris comme `autorisation` ou `autorisation accordée`.
+> `Grant` dans le contexte de `OAuth` doit être compris comme `autorisation` ou `autorisation accordée`, `autorisation attribuée`.
 
 ## `Authorization` endpoint
 
@@ -89,7 +89,7 @@ Dépend du `grant_type` choisi.
 
 - `Authorization Code Grant` (autorisation par code d'autorisation)
 - `Client Credentials Grant`
-- `Resource OOwner Password Credentials Grant`
+- `Resource Owner Password Credentials Grant`
 
 Seul `Implicit Grant` n'utilise pas le endpoint `/token`.
 
@@ -116,3 +116,10 @@ C'est le `endpoint` qui vous autorise l'accès à la `resource`.
 <img src="assets/resource-endpoint-server-resource-ok.png" alt="resource-endpoint-server-resource-ok" />
 
 Le `endpoint` est protégé par `authorization: Bearer` ainsi que l'`Access Token`.
+
+
+
+## Confidentialité
+
+Il est impératif de garder les `Tokens` secrets, l'utilisation exclusive de `Transport Layer Security TLS` est obligatoire pour toutes les communications.
+

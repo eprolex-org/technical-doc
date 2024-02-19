@@ -1,13 +1,11 @@
 # 02. Les acteurs d'`OAuth`
 
-### 
-
 <img src="assets/oauth-actors-four-inline.png" alt="oauth-actors-four-inline" style="zoom:150%;" />
 
 - `OAuth Provider` / `OAuth Server` / `Authorization Server`
 - `Resource Provider` -> `Web API`
 - `Resource Owner` -> le `User`
-- `Client` -> `Cloud App` ou `Mobile App`
+- `Client` -> `Cloud App`, `Web App` ou `Mobile App`
 
 
 
@@ -25,13 +23,17 @@ Il est composé de trois parties.
 
 Le `OAuth server` possède plusieurs `endpoint`:
 
+> `Grant` a ici le sens d'accorder ou d'attribuer :
+>
+> `Authorization Code Grant` = attribution du code d'autorisation.
+
 - #### `/authorize GET` 
   
   C'est pour recevoir l'`authorization code` (`Authorization Code Grant`) ou l'`Access Token` (`Implicit Grant`). Ce `endpoint` est destiné au `Client`.
   
 - #### `/token POST` 
   
-  C'est un `endpoint` protégé uniquement accessible si on a le bon `ClientId` avec le bon `ClientSecret`. On obtient un `Access Token` et un `Refresh Token`. Utilisable pour `Authorization Code Grant`, `Client Credentials Grant` et `resource Owner Password Credentials Grant`.
+  C'est un `endpoint` protégé, uniquement accessible si on a le bon `ClientId` avec le bon `ClientSecret`. On obtient un `Access Token` et un `Refresh Token`. Utilisable pour `Authorization Code Grant`, `Client Credentials Grant` et `resource Owner Password Credentials Grant`.
   
 - #### `/verify` 
 
