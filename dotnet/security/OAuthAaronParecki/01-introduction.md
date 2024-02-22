@@ -4,7 +4,7 @@
 
 ## Historique
 
-Avant `OAuth`, une application envoyait simplement un `username` et un `password` à une `API`.
+Avant `OAuth`, une application envoyait simplement un `username` et un `password` à une `API` (`HTTP Basic` : `Authorization: Basic Base64(<username:password>)`).
 
 Cela pose un problème, celui de donner ses `credentials` à tout un tas d'application.
 
@@ -26,7 +26,7 @@ Le problème est que l'on est pas sûr de l'identité de la personne connectée,
 
 Avec `OAuth` chaque application redirige un utilisateur vers un serveur `OAuth` pour se `logger` et le redirige ensuite vers l'`application` en lui passant un `token`.
 
-L'utilisateur se connecte et donne son `password` sur le serveur `OAuth` et non plus à l'`application`. L'`application` n'a plus la responsabilité de gérer les `password`ni de multiplier les facteurs d'authentification elle-même
+L'utilisateur se connecte et donne son `password` sur le serveur `OAuth` et non plus à l'`application`. L'`application` n'a plus la responsabilité de gérer les `password`ni de multiplier les facteurs d'authentification (`MFA`) elle-même
 
  
 
@@ -46,11 +46,11 @@ Il n'y a rien dans `OAuth` qui communique les informations sur l'`utilisateur`.
 
 Si on a besoin de connaître quelque chose sur l'`utilisateur`, c'est là que `OpenID Connect` intervient.
 
-`OpenID Connect` est une extension de `OAuth` qui permet au serveur `OAuth` de communiquer des donnée sur l'`utilisateur` en retour à l'`application` appelante.
+`OpenID Connect` est une extension de `OAuth` qui permet au serveur `OAuth` de communiquer des informations sur l'`utilisateur` en retour à l'`application` appelante.
 
 `OpenID Connect` va utilisé un `id token` là où `OAuth` va utiliser un `access token`.
 
-C'est l'`id token` qui contiendra les informations sur l'`utilisateur`.
+C'est l'`id token` qui contiendra les informations sur l'`utilisateur` (`user info`).
 
 <img src="assets/logos-openid-connect-oauth.png" alt="logos-openid-connect-oauth" style="zoom:67%;" />
 
