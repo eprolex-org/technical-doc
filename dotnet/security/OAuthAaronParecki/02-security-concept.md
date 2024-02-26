@@ -132,9 +132,11 @@ En conclusion la redirection vers l'`authorization server` est la méthode la pl
 
 ### `Front Channel`
 
-C'est le fait de passer les `credential` (les données) par l'`url` (par la barre d'adresse.
+C'est le fait de passer les `credential` (les données) par l'`url` (par la barre d'adresse).
 
 Un `flow` existe pour travailler avec : `Implicit Flow` mais ce `Flow` est déconseillé et ne fera plus partie de la norme dans le futur.
+
+> Comme une `redirection` ne peut-être que `Front Channel`, il n'est pas possible de manière sécurisée de renvoyer directement un `Access Token`. À la place un `Authorization Token` est renvoyé à l'application `Client` et celle-ci l'utilisera via le `Back Channel` pour obtenir de manière sécurisée un `Access Token` en présentant ses `credentials` (`ClientId`, `ClientSecret`).
 
 
 
@@ -162,7 +164,7 @@ Le `flow` commence par une redirection de l'`app` vers l'`authorization server`,
 
 Ces étapes de redirection sont `Front Channel` mais normalement cela n'a pas d'importance.
 
-Le `Server` va créer un `coupon`, le `authorization coupon` et le renvoyer vers l'application.
+Le `Server` va créer un `coupon`, le `authorization token` et le renvoyer vers l'application.
 
 Il faut être sûr de bien renvoyer le `coupon` à l'`application cliente`, on a pour ça le `client secret`.
 
@@ -184,4 +186,10 @@ Le `server` va retourner sa réponse vers l'`URL` de l'`application`, cette `URL
 
 Pour les `applications mobile` qui utilise plutôt un `scheme`, celui-ci n'est pas unique et ne peut pas servir à l'`identité` de l'`app`.
 
-l'`URL HTTPS` est donc notre seul moyen d'authentifier une `SPA` ou une `application mobile`, On doit l'enregistrer au près de l'`authorozation server`.
+```
+myapp://
+```
+
+l'`URL HTTPS` est donc notre seul moyen d'authentifier  une `application`, On doit l'enregistrer au près de l'`authorization server`.
+
+l'`URL` d'une application `Web` est normalement unique et fait donc partie de son `identité`.

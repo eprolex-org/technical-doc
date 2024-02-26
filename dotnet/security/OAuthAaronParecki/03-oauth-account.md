@@ -12,7 +12,9 @@ Je me suis inscris avec mon compte `Google`.
 
 <img src="assets/create-oauth-2.png" alt="create-oauth-2" style="zoom:50%;" />
 
-
+> Code de récupération
+>
+> 53UN7GBEPHF3E4ZD1F69BFDB
 
 ## Créer une `API`
 
@@ -56,7 +58,9 @@ La première ligne est le `issuer` (l'`emetteur`):
 "issuer": "https://hukar.eu.auth0.com/"
 ```
 
+On doit ensuite renseigner les `URL` d'`authrization` et de `token` :
 
+<img src="assets/auth-url-and-token-url.png" alt="auth-url-and-token-url" />
 
 
 
