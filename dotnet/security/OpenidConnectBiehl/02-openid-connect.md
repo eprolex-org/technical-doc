@@ -57,3 +57,13 @@ Elle est protégée par `OAuth`
 - Droits accès fin - granulaire : `OAuth scope` (`openid`, `address`, `email`)
 
 Il délivre un objet `Json` contenant les `Claims` sous forme de paire `clé/valeur`
+
+
+
+## `OpenId Connect` Flow
+
+<img src="assets/oidc-dance-flow-auth-code-access.png" alt="oidc-dance-flow-auth-code-access" />
+
+L'`Authorization Code` est la confirmation que le `resource Owner` permet ou accorde les droits d'accès (`granting access rights`) à son `Identity`.
+
+Le `Client` va utiliser `Authorization: Basic cf5Tghj...` pour passer ses `credentials` et renvoyer l'`Authorization`
