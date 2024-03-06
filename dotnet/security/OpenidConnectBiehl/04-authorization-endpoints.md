@@ -39,7 +39,7 @@ Vérifie juste le `client id` sans utilisé le `client secret` (plus tard vérif
 ### `redirect_uri` 
 C'est l'`URI` à laquelle le `OAuth Server` va retourner de manière asynchrone l'`Authorization Code`. C'est l'`URL` du `Redirect endpoint`. Cette `URL` doit être fournie lors de l'enregistrement de l'application `Client` sur le `OIDC Server`. Cette `URL` doit être public car elle doit être accessible par le navigateur, ou encore accessible sur le périphérique mobile (`URL local`) dans le cas d'un `GSM`.
 ### `nonce` 
-Cette valeur est utilisée pour lier le `id_token` à la session du `User`. Optionnel pour le `Authorization Code Flow` mais obligatoire pour l'`Implicit Flow`. Si il est fourni, le `nonce claim` est présent dans l'`id_token` comme un `Claim`. Est utilisé pour prévenir les `replay attacks`.
+Cette valeur est utilisée pour lier le `id_token` à la session du `User`. Optionnel pour le `Authorization Code Flow` mais obligatoire pour l'`Implicit Flow`. S'il est fourni, le `nonce claim` est présent dans l'`id_token` comme un `Claim`. Est utilisé pour prévenir les `replay attacks`.
 
 ### `claims`
 

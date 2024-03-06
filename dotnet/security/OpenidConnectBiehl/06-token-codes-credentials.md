@@ -173,6 +173,19 @@ Le `Client` doit valider l'émetteur du `token` d'une des manières suivante :
 - Sinon, la signature de l'`id_token` doit être vérifier en respectant les règles de `JWS` et en utilisant le crypto algorithme renseigné dans le `JOSE header`.
 - Si le `claim` : `aud` est une valeur unique et qu'un algorithme `MAC-based` est utilisé, le `clientSecret` (les octets en `UTF8`) est utilisé comme clé pour valider la signature.
 
+Les dates d'émission et d'expiration doivent être vérifiées :
+
+- La date courante est avant le `claim` : `exp`
+- La date courante est après le `claim` : `iat`
+
+Éviter les `replay attacks` : Si le client a demandé la `claim` optionnelle `nonce`, sa valeur doit être vérifiée et comparée avec la valeur fournie comme paramètre sur l'`Authorization Endpoint`.
+
+Si le `Client` a demandé la `claim` optionnelle `acr`, le `Client` s'attend que cette valeur fasse partie du domaine déclaré avec le paramètre `acr_values` sur l'`Authorization Endpoint`.
+
+Si le `Client` a demandé le `claim` : `auth_time`, le `Client` a besoin de re-demandé une `authentication` si, en accord avec ses propres règles, il détermine qu e trop de temps est passé depuis la dernière `authentication` du `User`. 
+
+
+
 
 
 
