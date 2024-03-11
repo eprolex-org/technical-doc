@@ -42,7 +42,7 @@ Il existe un troisième `Hybrid Flow`, un mix entre les deux premiers.
 | Tous les `tokens` sont retournés par le `Authorization Endpoint` | no                      | yes           | no          |
 | Tous les `tokens` sont retournés par le `Token Endpoint`     | yes                     | no            | no          |
 | Les `tokens` ne sont pas révélés au navigateur               | yes                     | no            | no          |
-| Le `Client` doit être `authentifié`                          | yes                     | no            | yes         |
+| Le `Client` peut être `authentifié`                          | yes                     | no            | yes         |
 | Les `Refresh Tokens` sont possible                           | yes                     | no            | yes         |
 | La communication est un aller-retour                         | no                      | yes           | no          |
 | la pluspart des communications sont `server-to-server`       | yes                     | no            | varies      |
