@@ -43,6 +43,14 @@ brew services start rabbitmq
 brew services stop rabbitmq
 ```
 
+Il est aussi recommandé d'activer les `flags` :
+
+```bash
+# highly recommended: enable all feature flags on the running node
+rabbitmqctl enable_feature_flag all
+Enabling all feature flags ...
+```
+
 Pour vérifier que le `service` tourne :
 
 ```bash
@@ -86,14 +94,6 @@ Si l'image n'est pas présente localement, `docker` la télécharge.
 `Docker` a installé la dernière version `3.11.9`.
 
 On se log comme précédemment.
-
-
-
-## Installation du `nuget` `RabbitMQ.Client`
-
-```bash
-dotnet add package RabbitMQ.Client
-```
 
 
 
@@ -144,103 +144,6 @@ Password : `mypassword`
 Une fois loggué:
 
 <img src="assets/rabbitmq-user-interface-cool.png" alt="rabbitmq-user-interface-cool" />
-
-
-
-## Envoyer un `Message` depuis une application `.net`
-
-```cs
-using System.Text;
-using System.Text.Json;
-using RabbitMQ.Client;
-
-namespace ConsoleSchedulerTest;
-
-public class MessageProducer
-{
-    public void SendingMessage<T>(T message)
-    {
-        var factory = new ConnectionFactory {
-            HostName = "localhost",
-            UserName = "user",
-            Password = "mypass",
-            VirtualHost = "/"
-        };
-
-        var conn = factory.CreateConnection();
-
-        using var channel = conn.CreateModel();
-
-        channel.QueueDeclare("cooking", durable: true, exclusive: false);
-
-        var jsonString = JsonSerializer.Serialize(message);
-        var body = Encoding.UTF8.GetBytes(jsonString);
-
-        channel.BasicPublish("", "cooking", body: body);
-    }
-}
-```
-
-> #### ! il faut mettre `exclusive` à `false` si on veut utiliser la `queue` dans le programme `Receiver`.
-
-On déclare une `Queue` avec `channel.DeclareQueue` et on envoie un `message` à la `queue` avec `channel.BasicPublish`.
-
-Dans un `endpoint` :
-
-```cs
-app.MapPost("cooking", (Cooking cooking, IMessageProducer messageProducer) => {
-    messageProducer.SendingMessage<Cooking>(cooking);
-});
-```
-
-<img src="assets/rabbitmq-one-queue-cooking-one-message.png" alt="rabbitmq-one-queue-cooking-one-message" />
-
-Dans l'`interface` de `RabbitMQ`, on voie qu'une `queue` a été créée et qu'elle a un total de `1 message`.
-
-> Ici on voie que la `queue` est `Excl` : `exclusive`, cela posait des problèmes de partage entre mes deux programmes, je l'ai mis à `false`.
-
-## Recevoir un `Message` dans un programme `Console` :  `.net`
-
-```cs
-using System.Text;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-
-var factory = new ConnectionFactory
-{
-    HostName = "localhost",
-    UserName = "user",
-    Password = "mypass",
-    VirtualHost = "/"
-};
-
-var conn = factory.CreateConnection();
-
-using var channel = conn.CreateModel();
-
-channel.QueueDeclare("cooking", durable: true, exclusive: false);
-
-var consumer = new EventingBasicConsumer(channel);
-
-consumer.Received += (model, eventArgs) =>
-{
-    var body = eventArgs.Body.ToArray();
-
-    var message = Encoding.UTF8.GetString(body);
-
-    Console.WriteLine($"message received: {message}");
-};
-
-channel.BasicConsume("cooking", true, consumer);
-
-Console.ReadKey();
-```
-
-À chaque fois qu'un message est envoyé dans la `Queue`, il est reçut par le programme `console`: 
-
-<img src="assets/all-message-received.png" alt="all-message-received" />
-
-
 
 
 
