@@ -82,7 +82,7 @@ dotnet add package RabbitMQ.Client
 
 
 
-`Producer` (`Console app`)
+### `Producer` (`Console app`)
 
 ```cs
 using RabbitMQ.Client;
@@ -91,6 +91,15 @@ var factory = new ConnectionFactory { HostName = "localhost" };
 
 using var connection = factory.CreateConnection();
 using var channel = connection.CreateModel();
+```
+Alternative
+```cs
+var factory = new ConnectionFactory();
+
+using var connection = factory.CreateConnection("localhost");
+using var channel = connection.CreateModel();
+```
+```cs
 
 channel.QueueDeclare(
 	queue: "letterbox",
@@ -125,11 +134,21 @@ On peut bien sûr redéfinir ces valeurs dans la liste d'initialisation:
 var factory = new ConnectionFactory { HostName = "localhost", Password = "huk@r99_", UserName = "hukar" };
 ```
 
+#### Pour envoyer du `JSON`
+
+```cs
+var jsonContent = JsonSerializer.Serialize(new { Name = "Tutoise", Age = 144 });
+
+var body = Encoding.UTF8.GetBytes(jsonContent);
+
+channel.BasicPublish("","FishQueue",false, null, body);
+```
 
 
 
 
-`Consumer` (`Console app`)
+
+### `Consumer` (`Console app`)
 
 ```cs
 using RabbitMQ.Client;
