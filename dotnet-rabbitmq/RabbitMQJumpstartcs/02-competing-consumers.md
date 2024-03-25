@@ -26,7 +26,7 @@ Ce n'est pas l'approche la plus efficace si chaque `Producer` traite le `Message
 
 <img src="assets/round-robin-pattern-limit-of-efficiens.png" alt="round-robin-pattern-limit-of-efficiens" />
 
-On doit régler la valeur de `prefetch` à `1` pour que `RabbitMQ` n'envoie pas plus. de `1` message par `Worker`.
+On doit régler la valeur de `prefetch` à `1` pour que `RabbitMQ` n'envoie pas plus de `1` message par `Worker`.
 
 Ce pattern permet de faire tourner plus de `Worker` si nécessaire (`scalability`) et permet que si l'un crash, il reste toujours au moins un autre `Worker` pour acomplir la tâche (`reliability`).
 
