@@ -56,3 +56,112 @@ word = "";
 Console.WriteLine($"Is the word {word} too long ? : {await IsTooLongWordAsync(word)}"); // BOUM
 ```
 
+`TaskCompletionSource` permet de créer une `Task` et de contrôler son cycle de vie.
+
+
+
+## `TaskCreationOptions.RunContinuationAsynchronously`
+
+### Code de test
+
+```cs
+Console.WriteLine($"Thread in Program start : {Thread.CurrentThread.ManagedThreadId}");
+
+TriggerEvent();
+Console.WriteLine($"Thread after TriggerEvent : {Thread.CurrentThread.ManagedThreadId}");
+
+var result = await DoSomethingAsync();
+Console.WriteLine($"Thread after DoSomethingAsync : {Thread.CurrentThread.ManagedThreadId}");
+
+Console.WriteLine($"result: {result}");
+
+Console.WriteLine($"Thread in Program stop : {Thread.CurrentThread.ManagedThreadId}");
+
+async Task TriggerEvent()
+{
+Console.WriteLine($"Thread in TriggerEvent Start : {Thread.CurrentThread.ManagedThreadId}");
+    await Task.Delay(TimeSpan.FromSeconds(4));
+    EventWrapper.Trigger();
+Console.WriteLine($"Thread in TriggerEvent Stop : {Thread.CurrentThread.ManagedThreadId}");
+}
+
+Task<int> DoSomethingAsync()
+{
+    Console.WriteLine($"Thread in DoSomethingAsync Start : {Thread.CurrentThread.ManagedThreadId}");
+    var tcs = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+    // var tcs = new TaskCompletionSource<int>();
+    
+    EventWrapper.MyEvent += (sender, args) =>
+    {
+        Console.WriteLine($"Thread before set result: {Thread.CurrentThread.ManagedThreadId}");
+        Thread.Sleep(TimeSpan.FromSeconds(2));
+
+        tcs.SetResult(2);
+        Console.WriteLine($"Thread after set result: {Thread.CurrentThread.ManagedThreadId}");
+    };
+    
+    Console.WriteLine($"Thread in DoSomethingAsync before Return : {Thread.CurrentThread.ManagedThreadId}");
+    return tcs.Task;
+}
+
+delegate void MyEventHandler(object sender, EventArgs ea);
+
+static class EventWrapper
+{
+    public static event MyEventHandler MyEvent;
+    
+    public static void Trigger() => MyEvent.Invoke(null, EventArgs.Empty);
+}
+```
+
+
+
+### Résultats
+
+Avec :
+
+```cs
+var tcs = new TaskCompletionSource<int>();
+```
+
+```
+Thread in Program start : 1
+Thread in TriggerEvent Start : 1
+Thread after TriggerEvent : 1
+Thread in DoSomethingAsync Start : 1
+Thread in DoSomethingAsync before Return : 1
+Thread before set result: 4
+Thread after DoSomethingAsync : 4
+result: 2
+Thread in Program stop : 4
+Thread after set result: 4
+Thread in TriggerEvent Stop : 4
+```
+
+Avec :
+
+```cs
+var tcs = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+```
+
+```
+Thread in Program start : 1
+Thread in TriggerEvent Start : 1
+Thread after TriggerEvent : 1
+Thread in DoSomethingAsync Start : 1
+Thread in DoSomethingAsync before Return : 1
+Thread before set result: 4
+Thread after set result: 4
+Thread in TriggerEvent Stop : 4
+Thread after DoSomethingAsync : 9
+result: 2
+Thread in Program stop : 9
+```
+
+On voit ici qu'avec `RunContinuationAsynchronously`, une `Thread` est créée lors du retour de la continuation :
+
+```cs
+var result = await DoSomethingAsync(); // + Thread 9
+```
+
+Ce qui n'est pas le cas sans cette option. À voire si cela peut jouer sur les performance en pratique.
