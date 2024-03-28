@@ -138,6 +138,65 @@ channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
 
 
+> ### ! Remarque
+>
+> Si `autoAck: true` , malgré d'avoir demandé de recevoir les `Messages` un par un avec `prefetchCount: 1`, on recevra tous les `messages` d'un seul coup.
+>
+> De même deux `Servers` organisés en `Fair Repartition` fonctionneront comme un `Round-robin` si `autoAck: true`.
+>
+> `autoAck: true` renvoie un accusé instantanément et instantanément un nouveau message est envoyé, ainsi de suite jusqu'à vider la `Queue`.
+>
+> Pour avoir un intérêt à configurer `prefetchCount` à `1`, il faut **obligatoirement** accuser réception à la main avec `BasicAck` et `autoAck` égale à `false`.
+>
+> 
+>
+> ### Test
+>
+> Deux `Server` font le même travail, l'un en `1s` l'autre en `2s`.
+>
+> On règle `prefetchCount` à `1`.
+>
+> J'envoie `26 Messages` (par exemple) à traiter et je mesure avec `StopWatch`:
+>
+> ```cs
+> var stopWatch = new Stopwatch();
+> 
+> List<Task<string>> serverProcesses = [];
+> 
+> for (int i = 0; i < 26; i++)
+> {
+>  Console.WriteLine($"Send Message: num[{i}]");
+> 
+>  serverProcesses.Add(rpc.CallAsync(i));
+> }
+> 
+> Console.WriteLine("Start StopWatch");
+> 
+> stopWatch.Start();
+> var results = await Task.WhenAll(serverProcesses);
+> stopWatch.Stop();
+> 
+> Console.WriteLine($"Stop StopWatch Time ellapsed: {stopWatch.Elapsed} ");
+> ```
+>
+> 
+>
+> Avec `autoAck: true`
+>
+> ```cs
+> Stop StopWatch Time ellapsed: 00:00:26.0251664 
+> ```
+>
+> Avec `autoAck: false`
+>
+> ```cs
+> Stop StopWatch Time ellapsed: 00:00:18.0297481 
+> ```
+>
+> On a une différence de `8s`, c'est un gain de `70%` de performance.
+
+
+
 ### `Client`
 
 #### `RPCClient.cs`
