@@ -1,12 +1,14 @@
 # 00 `HttpContext`
 
-
+`Codewrinkels` : https://www.youtube.com/watch?v=Eh4xPgP5PsM&t=0s
 
 ## Get started
 
-Une application `Blazor Server` partage sa mémoire entre 10,100 ou 1000 utilisateur simultanés.
+Une application `Blazor Server` partage sa mémoire entre 10, 100 ou 1000 utilisateur simultanés.
 
 Chaque utilisateur obtient son propre `circuit` possédant son propre `scope`, son propre conteneur `scoped` pour l'injection de dépendance.
+
+On peut considérer un `circuit` comme étant une session connectée pour un utilisateur.
 
 > ## Pour info
 >
@@ -16,9 +18,9 @@ Chaque utilisateur obtient son propre `circuit` possédant son propre `scope`, s
 >
 > Nous avons mis une application `Blazor Server` sous charge avec des clients actifs et avons surveillé la latence des interactions avec les utilisateurs. Dans nos tests, une seule instance `Standard_D1_v2` sur `Azure` (1 vCPU, 3,5 Go de mémoire) pouvait gérer plus de `5 000` utilisateurs simultanés sans aucune dégradation de la latence. Une instance `Standard_D3_V2` (4 vCPU, 14 Go de mémoire) a géré plus de `20 000` clients simultanés.
 
-Dans ce cadre il n'est pas garantie (comme dans une application serveur standard `ASP.NET`) d'avoir accès à `HttpContext` ou bien qu'il soit relié à une `session` particulière.
+Dans ce cadre il n'est pas garantie (comme dans une application serveur standard `ASP.NET`) d'avoir accès à `HttpContext` ou bien qu'il soit relié à une `session` particulière, ou encore il peut être `null`.
 
-### En général, on ne doit pas accéder à `HttpContext` dans une application `Blazor Server`
+### En général, on ne doit pas accéder à `HttpContext` dans une application `Blazor Server`.
 
 
 
@@ -56,7 +58,7 @@ Welcome to your new app.
 >
 > ### Remarque:
 >
-> Dans mes tests `HttpContext` n'est pas `null` dans un composant interactif, mais l'interactivité  est déterminé de manière global.
+> Dans mes tests `HttpContext` n'est pas `null` dans un composant interactif, mais l'interactivité  est déterminé de manière global (cela dépend des tests !!!).
 
 
 
