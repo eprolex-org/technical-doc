@@ -56,9 +56,7 @@ Welcome to your new app.
 >
 > [HttpContext](https://learn.microsoft.com/fr-fr/dotnet/api/microsoft.aspnetcore.http.httpcontext) peut être utilisé comme [paramètre en cascade](https://learn.microsoft.com/fr-fr/dotnet/api/microsoft.aspnetcore.components.cascadingparameterattribute) uniquement dans les *composants racines rendus statiquement* pour les tâches générales, telles que l’inspection et la modification d’en-têtes ou d’autres propriétés dans le composant `App` (`Components/App.razor`). La valeur est toujours `null` pour le rendu interactif.
 >
-> ### Remarque:
->
-> Dans mes tests `HttpContext` n'est pas `null` dans un composant interactif, mais l'interactivité  est déterminé de manière global (cela dépend des tests !!!).
+> En clair `HttpContext` n'est accessoble que dans `App.razor`, sinon sa valeur est `null`.
 
 
 
