@@ -4,7 +4,7 @@
 
 Cela permet de créer un découplage entre les différentes parties d'un système informatique.
 
-La pluspart des `Message Broker` utilisent une communication `asynchrone` et non un simple pattern `requset/reply`. 
+La pluspart des `Message Broker` utilisent une communication `asynchrone` et non un simple pattern `request/reply`. 
 
 ## Terminologie
 
@@ -20,7 +20,7 @@ La pluspart des `Message Broker` utilisent une communication `asynchrone` et non
 
 Un `Producer` est quelque chose qui publie (`Publishing`) un `Message` sur `RabbitMQ` (c'est la personne qui poste une lettre).
 
-Une fois le `Message` (la lettre) déposé, il n'y a pas besoin d'attendre une réponse, on nereste pas devant la boîte, c'est une communication `Asynchrone`.
+Une fois le `Message` (la lettre) déposé, il n'y a pas besoin d'attendre une réponse, on ne reste pas devant la boîte, c'est une communication `Asynchrone`.
 
 Un call `GET Http` est une communication `synchrone` en comparaison, on doit attendre la réponse sans rien faire.
 
@@ -109,7 +109,7 @@ channel.QueueDeclare(
     arguments: null
 );
 
-var message = "This is my first message";
+const string message = "This is my first message";
 
 var encodedMessage = Encoding.UTF8.GetBytes(message);
 

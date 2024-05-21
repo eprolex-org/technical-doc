@@ -30,7 +30,7 @@ On doit régler la valeur de `prefetch` à `1` pour que `RabbitMQ` n'envoie pas 
 
 Ce pattern permet de faire tourner plus de `Worker` si nécessaire (`scalability`) et permet que si l'un crash, il reste toujours au moins un autre `Worker` pour acomplir la tâche (`reliability`).
 
-<img src="assets/one-worker-crashed-and-two-syill-alive.png" alt="one-worker-crashed-and-two-syill-alive" />
+<img src="assets/co%20sumer-worker-concurrent-when-one-crasj-ddd.png" alt="co sumer-worker-concurrent-when-one-crasj-ddd" />
 
 
 
@@ -59,6 +59,12 @@ channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 Si un `Consumer` crash sans que l'`acknowledge` ne soit retourné, le `Message` retourne dans la `Queue` et peut-être traité par un autre `Consumer` :
 
 <img src="assets/handle-and-process-message-no-acknowledged.png" alt="handle-and-process-message-no-acknowledged" />
+
+> ### Remarque :
+>
+> ?? Il faut relancer le `worker` tombé pour que les `messages` soient réenvoyés à l'un des deux workers ??
+
+
 
 ## Round-robin
 

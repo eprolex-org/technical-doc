@@ -98,7 +98,7 @@ Cela permet de ne montrer la boîte d'erreur de validation que si le formulaire 
 Attention au `A` majuscule de `InputTextArea`.
 
 ```html
-<InputTextArea id="Description" type="text" @bind-value="robotModel.Description" />
+<InputTextArea id="Description" type="text" @bind-Value="robotModel.Description" />
 ```
 
 
@@ -153,5 +153,4 @@ public class Person
   	// au lieu de 
   	public DateTime DateOfBirth { get; set; } // => an 1 initilized
 ```
-
 

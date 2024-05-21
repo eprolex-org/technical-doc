@@ -128,7 +128,7 @@ Il est préférable d'utiliser `AuthorizeView` et `Task<AuthenticationState>`.
 
 
 
-## `Task<AuthenticationState>`
+## Logique procédural : `Task<AuthenticationState>`
 
 Au lieu d'utiliser `AuthenticationStateProvider`, on le remplase par `Task<AuthenticationState>` :
 
@@ -159,6 +159,122 @@ Au lieu d'utiliser `AuthenticationStateProvider`, on le remplase par `Task<Authe
 
 ```
 user is authenticated: False
+```
+
+
+
+## Utilisation avec `IAuthorizationService`
+
+On utilise `Task<AuthenticationState>` pour récupérer le `ClaimPrincipal` et on peut le combiner avec `IAuthorizationService` pour évaluer les `Policy`.
+
+Par exemple :
+
+- `user.Identity.IsAuthenticated` exécute du code pour les utilisateurs authentifiés.
+- `user.IsInRole("admin")` exécute du code pour les `admin`
+- `(await AuthorizationService.AuthorizeAsync(user, "content-editor")).Succeeded` test la `Policy` `"content-editor"` sur le `user`. 
+
+### Définir le `User`
+
+Dans un endpoint on va générer le user (avec un `Cookie`) :
+
+```cs
+app.MapGet("/signin/{name}/{role}", async (string name, string role, HttpContext context) =>
+{
+   List<Claim> claims = [new Claim("name", name), new Claim("appRole", role)];
+
+    var identity = new ClaimsIdentity(
+        claims,
+        authenticationType: "MyCookie",
+        nameType: null,
+        roleType: "appRole"
+    );
+
+    var user = new ClaimsPrincipal(identity);
+
+    await context.SignInAsync("MyCookie", user);
+
+    return Results.LocalRedirect("/");
+});
+```
+
+On défini un rôle simplement en spécifiant le paramètre `roleType`.
+
+
+
+### Définir l'`authentication` et l'`authorization`
+
+```cs
+builder.Services.AddAuthentication("MyCookie")
+    .AddCookie("MyCookie");
+```
+
+```cs
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("EditUser", cpb =>
+        {
+            cpb.RequireAssertion(ctx =>
+            {
+                var random = new Random();
+                var id = random.Next(1, 4);
+
+                Console.WriteLine($"Id = {id}");
+                return id == 3;
+            });
+        });
+```
+
+`AddAuthorizationBuilder` permet une écriture un peu plus concise que `AddAuthorization`.
+
+
+
+### Utilisation dans un `Component`
+
+```cs
+@page "/ProceduralAuthentication"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService AuthService
+
+<h3>Procedural Authentication</h3>
+<p>@message</p>
+
+<p>
+    <button @onclick="IsAuthenticated">Is Authenticated</button>
+    <button @onclick="IsAdmin">Is Admin</button>
+    <button @onclick="VerifyEditUser">Verify EditUser Policy</button>
+</p>
+```
+
+```cs
+@code {
+    [CascadingParameter] 
+    public Task<AuthenticationState>? AuthState { get; set; }
+
+    private ClaimsPrincipal? user;
+    private string message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = (await AuthState!).User;
+    }
+
+    private void IsAuthenticated()
+    {
+        message = $"User is authenticated : {user?.Identity?.IsAuthenticated}";
+    }
+
+    private void IsAdmin()
+    {
+        message = $"User is admin : {user.IsInRole("admin")}";
+    }
+
+    private async Task VerifyEditUser()
+    {
+        var result = await AuthService.AuthorizeAsync(user, "EditUser");
+        message = $"user verify [UseEdit] policy : {result.Succeeded}";
+    }
+}
 ```
 
 
@@ -275,5 +391,200 @@ Pour les autorisations basées sur les `claims`, c'est un cas particulier des au
 
 
 
-## Authentification asynchrone
+### Exemple d'imbrication d'`AuthorizeView`
+
+```csharp
+<AuthorizeView>
+
+    <Authorized>
+        <p>Utilisateur autorisé: @context.User.Identity.IsAuthenticated</p>
+        <p>Name: @context.User.FindFirst("name").Value</p>
+        
+        <AuthorizeView Policy="EyesColorSegregation">
+            <NotAuthorized>
+                <p>Je te merde j'ai pas les yeux olive</p>
+            </NotAuthorized>
+        </AuthorizeView>
+    </Authorized>
+    
+    <NotAuthorized>
+        <p>Utilisateur non autorisé: @context.User.Identity.IsAuthenticated</p>
+    </NotAuthorized>
+    
+</AuthorizeView>
+```
+
+
+
+
+
+## Atribut `[Authorize]`
+
+```cs
+@page "/Secret"
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<h3>Secret</h3>
+```
+
+Si on essaye d'aller directement sur cette page au démarage de l'application on est redirigé :
+
+```url
+localhost:5288/Account/Login?ReturnUrl=%2Fsecret
+```
+
+vers `Account/Login` par défaut, on obtient l'`url` de retour en `query parameter` : `/secret`.
+
+Si cette `url` est accéder sans que personne ne soit aurthentifié depuis l'application `Blazor` en train de tourner, on obtient un message `Not authorized` :
+
+<img src="assets/not-authorized-display-message-scree.png" alt="not-authorized-display-message-scree" /> 
+
+> L'attribut `[Authorize]` ne peut être utilisé que sur des composants `page`.
+> Si j'utilise ma `page` protégé comme composant dans la `home page` :
+>
+> ```cs
+> @page "/"
+> 
+> 
+> <PageTitle>Home</PageTitle>
+> 
+> // ...
+> 
+> <p>Welcome to your new app.</p>
+> 
+> <Secret />
+> 
+> @code {
+> 	// ...
+> ```
+>
+> Celle-ci n'est plus protégé et apparaît :
+> <img src="assets/secret-appearance-with-component-attribute-authorize.png" alt="secret-appearance-with-component-attribute-authorize" />
+>
+> Dans un composant il faut utiliser `<AuthorizeView>`.
+
+On peut aussi spécifier des `Roles` ou une `Policy` :
+
+```cs
+@attribute [Authorize(Roles = "user-secret")]
+
+<h3>Secret</h3>
+```
+
+ou
+
+```cs
+@attribute [Authorize(Policy = "EyesColorSegregation")]
+
+<h3>Secret</h3>
+```
+
+
+
+## Protéger une `route` : `Resource` Authorization
+
+> ### ! Je n'arrive pas à faire fonctionner la démo
+
+On peut envoyer les données de routage au `context` d'autorisation grâce à l'attribut `Resource` de `AuthorizeRouteView` :
+
+```cs  
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView Resource="routeData" RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)"/>
+        <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+    </Found>
+</Router>
+```
+
+### `Resource="routeData"`
+
+On passe les données de la `route` à `Resource`.
+
+Maintenant si j'observe le `context` d'une `policy` :
+
+```cs
+builder.Services.AddAuthorization(cfg =>
+    {
+        cfg.AddPolicy("EditUser", cpb => { cpb.RequireAssertion(ctx =>
+        {
+            var context = ctx;
+            return false;
+        }); });
+    }
+);
+```
+
+<img src="assets/context-route-data-observer-authorization.png" alt="context-route-data-observer-authorization" />
+
+On retrouve notre attribut `Resource` et dedans l'`Id` passé à la route.
+
+Si je ne passe pas les `RouteData` à `Resource` celui-ci contient un plus grand nombre d'information dans lesquelles on retrouve quand même cet `id`.
+
+<img src="assets/resource-without-routedata-assignment.png" alt="resource-without-routedata-assignment" />
+
+<img src="assets/route-data-also-here-in-resource.png" alt="route-data-also-here-in-resource" />
+
+### `Policy` restreignant l'accès à l'`Id = 3`
+
+```cs 
+builder.Services.AddAuthorizationCore(cfg =>
+    {
+        cfg.AddPolicy("EditUser", cpb =>
+        {
+            cpb.RequireAssertion(ctx =>
+            {
+                if (ctx.Resource is RouteData rd)
+                {
+                    rd.Values.TryGetValue("id", out var value);
+                    var id = Convert.ToInt32(value);
+                    return id == 3;
+                }
+
+                return false;
+            });
+        });
+    }
+);
+```
+On peut aussi écrire comme ceci (cela évite une imbrication) :
+```cs
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("EditUser", cpb =>
+        {
+            cpb.RequireAssertion(ctx =>
+            {
+               // ...
+            });
+        });
+```
+
+> ### ! ça ne fonctionne pas !
+
+
+
+## Personnalisé l'affichage de `Not Authorized`
+
+```cs
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView Resource="routeData" RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+            <NotAuthorized>
+                <h2>Tu n'es pas autorisé</h2>
+                <p> tu pus ~~~~(°.°)</p>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+    </Found>
+</Router>
+```
+
+On utilise `<NotAuthorized>`.
+
+<img src="assets/your-not-authorized-template-replacment.png" alt="your-not-authorized-template-replacment" />
+
+
+
+
 

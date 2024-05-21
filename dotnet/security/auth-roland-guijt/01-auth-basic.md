@@ -90,6 +90,19 @@ On ajoute l'attribut `[Authorize]` en haut d'un composant (d'une page).
 > Cependant il est facile de hacker cette sécurité en allant sur un composant non protégé et en revenant sur celui protégé, il est maintenant accessible !
 >
 > <img src="assets/hack-flow-authorize.png" alt="hack-flow-authorize" />
+>
+> Il faut modifier le `Router` avec `AuthorizeRouteView` :
+>
+> ```cs
+> <Router AppAssembly="typeof(Program).Assembly">
+>     <Found Context="routeData">
+>         <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)"/>
+>         <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+>     </Found>
+> </Router>
+> ```
+>
+> 
 
 À la première requête `HTTP`, on a une redirection vers l'`url` :
 
@@ -97,7 +110,9 @@ On ajoute l'attribut `[Authorize]` en haut d'un composant (d'une page).
 http://localhost:5088/Account/Login?ReturnUrl=%2F
 ```
 
-De par la nature particulière de `Blazor Server`, e check n'est pas réalisé par la navigation interne d'où le hack plus haut.
+De par la nature particulière de `Blazor Server`, le check n'est pas réalisé par la navigation interne d'où le hack plus haut.
+
+À la place on arrive sur une page avec un message `Not authorized`.
 
 
 
