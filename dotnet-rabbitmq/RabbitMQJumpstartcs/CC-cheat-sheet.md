@@ -44,7 +44,7 @@ channel.QueueDeclare(
 );
 ```
 
-
+`exclusive: true` la `queue` ne peut être utilisé que par l'application ayant créé la connexion, si la connexion se termine, la `queue` est détruite.
 
 ### Encoder un `message` en `Bytes`
 
@@ -56,11 +56,11 @@ var bytesMessage = Encoding.UTF8.GetBytes(message);
 
 
 
-### Publier un `message` : `BasucPublish`
+### Publier un `message` : `BasicPublish`
 
 ```cs
 channel.BasicPublish(
-    exchange: "",
+    exchange: string.Empty,
     routingKey: "firstexample",
     basicProperties: null,
     body: bytesMessage
@@ -80,7 +80,7 @@ var consumer = new EventingBasicConsumer(channel);
 ### Gérer la reception d'un `message`
 
 ```cs
-consumer.Received += (model, eventArgs) =>
+consumer.Received += (_, eventArgs) =>
 {
     var body = eventArgs.Body.ToArray();
     var message = Encoding.UTF8.GetString(body);
@@ -129,3 +129,27 @@ channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 `prefetchCount` : nombre de `messages` reçu
 
 `global` : le réglage est-il pour tous les `Consumers`
+
+
+
+### Créer un `Exchange` : `ExchangeDeclare`
+
+```cs
+channel.ExchangeDeclare(
+    exchange: "app_exchange",
+    ExchangeType.Direct
+);
+```
+
+
+
+### Lier une `Queue` à un `Exchange` : `QueueBind`
+
+```cs
+channel.QueueBind(
+    queue: "customer_queue",
+    exchange: "app_exchange",
+    routingKey: "order"
+);
+```
+

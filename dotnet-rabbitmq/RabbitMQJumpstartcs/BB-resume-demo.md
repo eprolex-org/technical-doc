@@ -16,7 +16,7 @@ Communication `asynchrone`.
 
 `Exchange` = centre de trie, routeur de `message`. Il existe plusieurs types d'`exchange`.
 
-`Binding` = un lien entre une `queue` et un exchange.
+`Binding` = un lien entre une `queue` et un `exchange`.
 
 Une `queue` peut être `Bindée` à plusieurs `exchanges`.
 
@@ -100,35 +100,150 @@ Un `channel` peut être configuré grâce à sa méthode `BasicQoS`, Quality of 
 
 
 
-## `Pub`-`Sub` pattern
+## Exchange
 
-Le `Publisher` ne s'occupe pas de quel `consumer` va recevoir le `message`. Chaque consumer se `bind` lui même au `Fanout Exchange`. Le `Fanout Exchange` envoie une copie du `message` à n'importe quel `consumer` s'étant `bindé` avec lui.
+- Direct
+- Fanout
+  <img src="assets/payment-service-not-binded-from-exchange-fanout-schema.png" alt="payment-service-not-binded-from-exchange-fanout-schema" style="zoom:33%;" />
 
-### déclaration du `Fanout Exchange` dans le `Publisher`
+  ```cs
+  channel.ExchangeDeclare(exchange: "user_created", type: ExchangeType.Fanout);
+  
+  var queueName = channel.QueueDeclare().QueueName;
+  channel.QueueBind(
+      queue: queueName, 
+      exchange: "user_created",
+      routingKey: ""
+  );
+  ```
+  
+- Headers
+  <img src="assets/headers-exchange-schema-with-brian.png" alt="headers-exchange-schema-with-brian" />
+
+  ```cs
+  channel.ExchangeDeclare(exchangeName, ExchangeType.Headers);
+  
+  var headers = new Dictionary<string, object>
+  {
+      { "x-match", "any" }, // "all" = tous les en-têtes correspondent
+      { "header1", "value1" }, // Remplacez par vos en-têtes et valeurs
+      { "header2", "value2" } 
+  };
+  
+  channel.QueueBind(queueName, exchangeName, string.Empty, headers);
+  ```
+
+  Pour publier un `message`:
+  
+  ```csharp
+  var properties = channel.CreateBasicProperties();
+  properties.Headers = new Dictionary<string, object>
+  {
+      { "header1", "value1" },
+      { "header2", "value2" }
+  };
+  
+  var messageBody = Encoding.UTF8.GetBytes("Votre message ici");
+  channel.BasicPublish(
+      exchange: "myexchange",
+      routingKey: string.Empty,
+      basicProperties: properties,
+      body: messageBody
+  );
+  ```
+  
+- Topic
+  <img src="assets/topic-exchange-payments-user-europe-schema-three-services-ok.png" alt="topic-exchange-payments-user-europe-schema-three-services-ok" />
+  `user.europe.payment`,  `user.europe.*`, `user.#`, `#.payment`, `user.*.europe`
+  `Producer`
+
+  ```cs
+  channel.ExchangeDeclare("mytopicexchange", ExchangeType.Topic);
+  
+  var messagePayment = Encoding.UTF8.GetBytes($"Message Payment {i}");
+  channel.BasicPublish(
+      exchange: "mytopicexchange", // <-
+      routingKey: "payment.europe.user", // <-
+      basicProperties: null,
+      body: messagePayment
+  );
+  ```
+
+  `Consumer`
+
+  ```cs
+  channel.QueueBind(
+      queue: queueName,
+      exchange: "mytopicexchange", // <-
+      routingKey: "payment.#" // <-
+  );
+  ```
+
+
+
+## `Direct` Exchange
+
+Le `Default Exchange` est un `Direct Exchange`.
+
+### Default
 
 ```cs
-channel.ExchangeDeclare(exchange: "user_created", type: ExchangeType.Fanout);
+channel.QueueDeclare(
+    queue: "log_queue",
+    durable: false,
+    exclusive: false,
+    autoDelete: true
+);
+
+channel.BasicPublish(
+    exchange: string.Empty,
+    routingKey: "log_queue",
+    body: message
+);
 ```
 
-### `Binding` dans un `consumer`
+La même chose avec un `exchange` explicite :
 
 ```cs
-channel.QueueBind(queue: queueName, exchange: "user_created", routingKey: "");
+channel.ExchangeDeclare(
+    exchange: "log_exchange",
+    ExchangeType.Direct
+);
+
+channel.QueueDeclare(
+    queue: "log_queue",
+    durable: false,
+    exclusive: false,
+    autoDelete: true
+);
+
+
+channel.QueueBind(
+    queue: "log_queue",
+    exchange: "log_exchange",
+    routingKey: "log_queue"
+);
+
+channel.BasicPublish(
+    exchange: "log_exchange",
+    routingKey: "log_queue",
+    body: message
+);
 ```
+
+
+
+### Exo 5 
+
+<img src="assets/direct-exchange-example-exercise-five.png" alt="direct-exchange-example-exercise-five" />
+
+Créer le système plus haut.
+
+
 
 
 
 ## `Async` Consumer
 
 // à faire
-
-
-
-## [Bonus] le `routing`
-
-
-
-## [Bonus] `Requset`-`Response` pattern
-
-
 
