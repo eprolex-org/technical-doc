@@ -153,3 +153,41 @@ channel.QueueBind(
 );
 ```
 
+
+
+## Concurrence des `Consumers`
+
+ ### Nombre de `Consumer` concurrent : `ConsumerDispatchConcurrency`
+
+```cs
+var coresNumber = Environment.ProcessorCount;
+
+factory.ConsumerDispatchConcurrency = coresNumber;
+
+using var connection = factory.CreateConnection("localhost");
+```
+
+
+
+### `async` consumer
+
+Si le `consumer` exécute une lambda asynchrone :
+
+```cs
+factory.DispatchConsumersAsync = true;
+
+// ...
+
+var consumer = new AsyncEventingBasicConsumer(channel);
+
+consumer.Received += async (_, ea) =>
+{
+    var body = ea.Body.ToArray();
+    var message = Encoding.UTF8.GetString(body);
+
+    await SimulerTraitementLong();
+
+    channel.BasicAck(ea.DeliveryTag, false);
+};
+```
+

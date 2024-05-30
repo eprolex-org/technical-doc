@@ -345,7 +345,7 @@ var coresNumber = Environment.ProcessorCount;
 factory.ConsumerDispatchConcurrency = coresNumber;
 ```
 
-> je ne vois aucune différence de performance entre les deux approches. Par sécurité peut-être utiliser la version `async` certainement prévu pour par les développeur de `RabbitMQ`.
+> je ne vois aucune différence de performance entre les deux approches. Par sécurité peut-être utiliser la version `async` certainement prévu par les développeur de `RabbitMQ`.
 >
 > Utilisation pour les opération `I/O`. (call `REST`)
 
