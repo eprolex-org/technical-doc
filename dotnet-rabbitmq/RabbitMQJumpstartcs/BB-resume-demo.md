@@ -241,9 +241,111 @@ Créer le système plus haut.
 
 
 
+## `Concurrent` Consumer
+
+On simule un traitement long avec `Thread.Sleep` :
+
+```cs
+consumer.Received += (_, ea) =>
+{
+    var body = ea.Body.ToArray();
+    var message = Encoding.UTF8.GetString(body);
+
+    Console.WriteLine($"Start: {message}: {DateTime.Now.Minute}:{DateTime.Now.Second}:{DateTime.Now.Millisecond}");
+    
+    Thread.Sleep(TimeSpan.FromSeconds(1));
+
+    Console.WriteLine($"Finish: {message}: {DateTime.Now.Minute}:{DateTime.Now.Second}:{DateTime.Now.Millisecond}");
+    channel.BasicAck(ea.DeliveryTag, false);
+};
+```
+
+Si on a 48 `messages`, le Consumer va mettre `48 s` pour tous les traiter.
+
+On peut améliorer cela en gérant la concurrence :
+
+```cs
+var coresNumber = Environment.ProcessorCount;
+factory.ConsumerDispatchConcurrency = coresNumber;
+```
+
+On passe alors à un traitement de `4 s` (`48 / 12`).
+
+
+
 
 
 ## `Async` Consumer
 
-// à faire
+On peut rendre le `EventHandler` asynchrone :
+
+```cs
+var consumer = new EventingBasicConsumer(channel);
+```
+
+```cs
+consumer.Received += async (_, ea) =>
+{
+    
+    var body = ea.Body.ToArray();
+
+    Console.WriteLine($"Start: {DateTime.Now.Minute}:{DateTime.Now.Second}:{DateTime.Now.Millisecond}");
+    
+    await Task.Run(SimulerTraitementLong);
+
+    var message = Encoding.UTF8.GetString(body);
+    
+    channel.BasicAck(ea.DeliveryTag, false);
+   
+    Console.WriteLine($"Finish: {message}: {DateTime.Now.Minute}:{DateTime.Now.Second}:{DateTime.Now.Millisecond}");
+};
+```
+
+```cs
+void SimulerTraitementLong()
+{
+    Thread.Sleep(TimeSpan.FromSeconds(1));
+}
+```
+
+
+
+### `AsyncEventingBasicConsumer`
+
+On peut aussi utiliser un `AsyncEventingBasicConsumer` :
+
+```cs
+factory.DispatchConsumersAsync = true;
+```
+
+```cs
+var consumer = new AsyncEventingBasicConsumer(channel);
+```
+
+Les `messages` sont traités un par un :
+
+```
+Start: 25:36:710
+Finish: Message 6: 25:37:711
+Start: 25:37:711
+Finish: Message 7: 25:38:711
+Start: 25:38:711
+Finish: Message 8: 25:39:713
+Start: 25:39:713
+Finish: Message 9: 25:40:714
+Start: 25:40:714
+Finish: Message 10: 25:41:715
+Start: 25:41:715
+```
+
+Il faut de nouveau définir le nombre de traitements concurrents, celui-ci doit idéalement être égale au nombre de processeur :
+
+```cs
+var coresNumber = Environment.ProcessorCount;
+factory.ConsumerDispatchConcurrency = coresNumber;
+```
+
+> je ne vois aucune différence de performance entre les deux approches. Par sécurité peut-être utiliser la version `async` certainement prévu pour par les développeur de `RabbitMQ`.
+>
+> Utilisation pour les opération `I/O`. (call `REST`)
 
