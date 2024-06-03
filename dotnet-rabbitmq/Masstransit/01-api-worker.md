@@ -170,6 +170,10 @@ Il est `bindé` au précédent :
 
 <img src="assets/binding-exchange-with-first-fanout.png" alt="binding-exchange-with-first-fanout" style="zoom:33%;" />
 
+Le `Consumer` créé un `Exchange` du même nom que sa `Queue`, celle-ci est alors liée à l'`Exchange` créé par le `Producer` :
+
+ `<namespace>:<ContractMessageClass>`
+
 
 
 ## résultat d'un appel `POST`
