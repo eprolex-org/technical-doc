@@ -128,7 +128,9 @@ channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
 `prefetchCount` : nombre de `messages` reçu
 
-`global` : le réglage est-il pour tous les `Consumers`
+`global` : le nombre de `message` est-il pour tous les `Consumers`
+
+> Si `prefetchCount` est de `12` et `global` est à `true`, c'est `12 messages` pour tous les `consumers`, Si il y a `3 consumers`, cela fait `4 messages` par `Consumers`. Par contre si `global` est à `false`, cela ferait `12 messages` par `consumer`, donc `36` au total.
 
 
 
