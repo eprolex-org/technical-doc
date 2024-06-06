@@ -74,3 +74,24 @@ builder.Services.AddMassTransit(x =>
 ```
 
 <img src="assets/last-but-not-least-renaming-exchange.png" alt="last-but-not-least-renaming-exchange" style="zoom:67%;" />
+
+
+
+## Différence avec `Send`
+
+- `Publish` ne créé pas de `queue` alors que `Send` en créé une même en l'absence d'un `Consumer`.
+
+- `Send` permet de spécifier une destination précise en passant une `URI` :
+
+  ```cs
+  var endpoint = await bus.GetSendEndpoint(new Uri("queue:auto"));
+  
+  await endpoint.Send(new CreateDocument { Id = 678 });
+  ```
+
+- `Publish` envoie à tous les `Consumers` lié par le contrat (le `message`)
+
+<img src="assets/difference-between-send-and-publish.png" alt="difference-between-send-and-publish" />
+
+
+
