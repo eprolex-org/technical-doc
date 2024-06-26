@@ -36,7 +36,7 @@ On a ici une abstraction `Stream reader / writer` pour nous faciliter le travail
 
 ## Bénéfices
 
-- On traite les données par petits morceaux (incrément)
+- On traite les données par petits morceaux (incrément : `chunks`)
 - Ils fournissent une abstraction par rapport au `Backing Store` (on ne se soucie plus du `Backing Store`)
 - Il apporte de la flexibilité dans le contrôle
 - On peut utiliser des `Random Access` pour aller directement à l'endroit qui nous intéresse
