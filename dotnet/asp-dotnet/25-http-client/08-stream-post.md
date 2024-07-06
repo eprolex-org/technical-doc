@@ -189,3 +189,6 @@ private async Task PostPosterWithStream()
 }
 ```
 
+> ## Update 2 juillet 2024 `.net 8`
+>
+> Je ne vois pas de gain de performance, ni au niveau de la vitesse de traitement ni au niveau de l'occupation mémoire, peut-être même l'inverse avec un avantage pour la version sans `stream` (`PostAsJsonAsync`) qui semble optimisée.

@@ -99,6 +99,19 @@ response.EnsureSuccessStatusCode();
 
 
 
+## Alternative avec `PostAsJsonAsync`
+
+```cs
+async Task PostPoster(HttpClient client)
+{
+    var poster = new Poster("new poster", GeneratePicture());
+
+    await client.PostAsJsonAsync("/poster", poster);
+}
+```
+
+Dans ` System.Net.Http.Json.HttpClientJsonExtensions`
+
 
 
 
