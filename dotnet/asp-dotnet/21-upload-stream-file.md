@@ -95,21 +95,21 @@ app.MapPost("/download", async (Stream stream) =>
 
 
 
-## Big `File`
+# Big `File`
 
-### GET `Web API` -> `HttpClient`
+## GET `Web API` -> `HttpClient`
 
-Semble fonctionner `out of the box`, pas de problème, le code reste le même.
-
-
-
-### POST `HttpClient` -> `API`
+Semble fonctionner `out of the box`, pas de problème, le code reste le même.POST `HttpClient` -> `API`
 
 L'envoie d'un fichier de `1Go` génère une erreur explicite :
 
 ```
  Microsoft.AspNetCore.Server.Kestrel.Core.BadHttpRequestException: Request body too large. The max request body size is 30000000 bytes.
 ```
+
+
+
+### Configuration de `Kestrel`
 
 Il faut modifier la configuration de `Kestrel` pour accepter un plus gros `body` de requête :
 
