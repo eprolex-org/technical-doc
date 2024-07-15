@@ -93,7 +93,7 @@ J'ai le bouton qui devient jaune lorsque le `count` change.
 
 <img src="assets/bouton-lumin-style-changed.png" alt="bouton-lumin-style-changed" style="zoom:25%;" />
 
-> ## `StaeHasChanged` vs `InvokeAsync(StateHasChanged)`
+> ## `StateHasChanged` vs `InvokeAsync(StateHasChanged)`
 >
 > On utilise directement `StateHasChanged` si la tâche est synchrone et sur le même `Thread` que le `component`.
 >
