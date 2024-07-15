@@ -14,4 +14,12 @@ On voit que malgré la mise à jour de liste, l'affichage des données n'est pas
 
 ## `@key` la solution
 
-Pour un problème de mise à jour d'une liste (dans Eprolex), l'utilisation de `@key` résout le problème.
+Pour un problème de mise à jour d'une liste (dans `Eprolex`), l'utilisation de `@key` résout le problème.
+
+```ruby
+@foreach (var delegue in _delegues)
+{
+    <EpFormUpdateDeleteDelegue @key="delegue" Delegue="delegue"/>
+}
+```
+
