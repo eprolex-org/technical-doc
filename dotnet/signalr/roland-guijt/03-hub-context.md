@@ -45,44 +45,70 @@ On peut injcter dans un `endpoint` directement le `HubContext` pour accéder au 
 
 
 
-## Exemples d'utilisation
-
-### `Add`
-
 ```cs
-app.MapPost("/{connectionId}", 
-    (
-        EnchereRepository repo, 
-        Enchere enchere, 
-        IHubContext<EnchereHub> context,
-        string connectionId) =>
+group.MapPut("/update/{connectionId}", async (
+    Document documentToUpdate, 
+    DocumentRepository repo,
+    IHubContext<DocumentHub> context,
+    string connectionId) =>
 {
-    repo.Add(enchere);
+    var rowsAffected = repo.Update(documentToUpdate);
+    
+    if(rowsAffected == 0)
+    {
+        await context.Clients.
+            Client(connectionId).
+            SendAsync(DocumentEvent.NotFound, documentToUpdate.Id);
+        
+        return NotFound();
+    }
 
-    context.Clients.Client(connectionId).SendAsync("enchereAdded", enchere);
-    context.Clients.AllExcept(connectionId).SendAsync("changeNotifyed");
+    await Task.Delay(600);
+    Console.WriteLine("document updated");
+
+    await context.Clients.
+        Client(connectionId).
+        SendAsync(DocumentEvent.Updated, documentToUpdate);
+   
+    await context.Clients
+        .AllExcept(connectionId)
+        .SendAsync(DocumentEvent.ChangeNotifyed);
+    
+    return NoContent();
 });
 ```
 
-### `Delete`
+
+
+
+
+## `Caller`
+
+Depuis un `Hub` on peut communiquer seulement avec l'utilisateur appelant : le `Caller` :
 
 ```cs
-app.MapDelete("/{enchereId:int}/{connectionId}", (
-    EnchereRepository repo, 
-    int enchereId, 
-    string connectionId, 
-    IHubContext<EnchereHub> context) =>
+public class DocumentHub : Hub
 {
-    repo.Delete(enchereId);
+    public async Task LogDocument(Document documentToLog)
+    {
+        // ...
 
-    context.Clients.Client(connectionId).SendAsync("enchereDeleted", enchereId);
-    context.Clients.AllExcept(connectionId).SendAsync("changeNotifyed");
-});
+        await Clients.Caller.SendAsync(DocumentEvent.LogWrited);
+    }
+}
 ```
 
-### `Update`
+Ici seul le `Caller` recevra l'événement `DocumentEvent.LogWrited` :
+
+<img src="assets/caller-or-not-caller.png" alt="caller-or-not-caller" />
+
+Le `Caller` est accessible uniquement dans le `Hub`, si on tente d'y accéder ailleurs, il n'est pas présent :
+
+<img src="assets/caller-accessibility-hub-context-area.png" alt="caller-accessibility-hub-context-area" />
+
+Cela oblige à envoyer le `connectionId` et l'utiliser comme ceci :
 
 ```cs
-
+await context.Clients.Client(connectionId).SendAsync("DocumentAdded", document);
 ```
 
