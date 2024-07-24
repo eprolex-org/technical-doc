@@ -209,7 +209,7 @@ On a donc un `User` par défaut avec des valeurs par défaut pour ses propriét�
 > ```cs
 > builder.Services.Configure<JsonOptions>(options =>
 > {
->  options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycle;
+>  options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 > });
 > ```
 >
