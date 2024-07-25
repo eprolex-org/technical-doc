@@ -1,4 +1,4 @@
-# 21 Upload `File`
+# 21 Upload `Stream File`
 
 ## Schéma général
 
@@ -96,6 +96,8 @@ app.MapPost("/download", async (Stream stream) =>
 
 
 # Big `File`
+
+> #### ! Ne jamais utiliser `byte[]` ou `MemoryStream`.
 
 ## GET `Web API` -> `HttpClient`
 
