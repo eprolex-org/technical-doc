@@ -52,4 +52,27 @@ git rebase spaghetti
 >
 > <img src="assets/rabasing-is-not-only-deplacing.png" alt="rabasing-is-not-only-deplacing" style="zoom:50%;" />
 >
-> Les `commits` restants n'étant plus pointés, ils seront `garbage-collectés` par `Git`.
+> Les `commits` restants n'étant plus pointés, plus joignables, ils seront `garbage-collectés` par `Git`.
+
+
+
+## `Rebase` vs `Merge`
+
+<img src="assets/rrebase-vs-merrge-pro-and-con.png" alt="rrebase-vs-merrge-pro-and-con" />
+
+`Merge` ne transforme pas l'historique mais peut-être compliqué à suivre avec plusieurs `branches`.
+
+Avec `Rebase` l'historique est propre et linéaire, mais il n'est pas vrai, il est artificiellement recréé avec `Rebase`.
+
+Les `commits` bleu semblent avoir été créé après les rose avec `rebase`, ce qui n'est pas vrai.
+
+`Merge` rend mieux compte de l'historique réel.
+
+> ### Dans le doute, utiliser plutôt `merge`.
+
+
+
+
+
+
+
