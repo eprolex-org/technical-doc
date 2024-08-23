@@ -39,7 +39,7 @@ Ces informations se retrouve dans `.csproj`, si on veut une description pour `Gi
 ## Commande pour ajouter la source
 
 ```bash
-dotnet nuget add source --username eprolex-org --password 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 --store-password-in-clear-text --name github "https://nuget.pkg.github.com/eprolex-org/index.json"
+dotnet nuget add source --username eprolex-org --password TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/eprolex-org/index.json"
 ```
 
 
@@ -58,7 +58,7 @@ dotnet nuget push "Hukar.Model.0.9.0.nupkg" --source "github"
 
 ## Personal Access Token
 
-On a besoin avant de publier un `package` sur `GitHub` de créer un `Personaal Access Token`.
+On a besoin avant de publier un `package` sur `GitHub` de créer un `Personal Access Token`.
 
 <img src="assets/token-one.png" alt="token-one" />
 
@@ -68,7 +68,5 @@ On a besoin avant de publier un `package` sur `GitHub` de créer un `Personaal A
 
 <img src="assets/token-four.png" alt="token-four" />
 
-```
-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
-```
+
 
