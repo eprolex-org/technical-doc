@@ -20,7 +20,11 @@ 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
 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
 ```
 
+```
+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
+```
 
+`GitHub Package` utilise exclusivement un `PAT` (Personnal Access Token) pour utiliser, publier et supprimer un `package`.
 
 ## 2. Ajouter une source de `Nuget` sur sa machine
 
@@ -32,7 +36,15 @@ dotnet nuget add source https://nuget.pkg.github.com/<USER_NAME>/index.json
 ```
 
 ```bash
-dotnet nuget add source https://nuget.pkg.github.com/kmsraadvst/index.json --name github-kms --username kmsraadvst --password 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
+dotnet nuget add source https://nuget.pkg.github.com/kmsraadvst/index.json --name github
+```
+
+Ici les `credentials` sont demandés par l'`IDE`.
+
+### Avec les `credentials`
+
+```bash
+dotnet nuget add source https://nuget.pkg.github.com/kmsraadvst/index.json --name github --username kmsraadvst --password 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
 ```
 
 `--name` nom de la `source`
@@ -65,6 +77,16 @@ Sources inscrites :
   2.  github-kms [Activé]
       https://nuget.pkg.github.com/kmsraadvst/index.json
 ```
+
+Il ne semble pas obligatoire d'ajouter :
+
+```bash
+--username kmsraadvst --password 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 --store-password-in-clear-text
+```
+
+C'est l'`IDE` qui demandera ces `credentials` lors de l'ajout de la `source`.
+
+### Tester ce qui fonctionne !
 
 
 
@@ -134,15 +156,17 @@ dotnet nuget push <PACKAGE_NAME> --api-key <TOKEN> --source <SOURCE_NAME>
 
 ```
 
-
-
 ```bash
 dotnet nuget push "Hukar.Model.0.9.0.nupkg" --api-key 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 --source "github-kms"
 ```
 
 
 
+## 5. Utiliser le `Nuget`
 
+```bash
+dotnet add package Canard.Model --version 0.7.0
+```
 
 
 
