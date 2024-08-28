@@ -82,3 +82,28 @@ On voit que `git fetch` rapatrie le `commit` du remote et créé une `branche`.
 L'avantage de cette méthode c'est qu'on ne perd rien de l'historique.
 
 C'est ce que fait la commande `git pull`.
+
+## Fork 
+
+C'est un clone en `remote` d'un `repository` existant.
+
+On ne touche pas au `repository` d'origine.
+
+<img src="assets/fork-project-for-new-experiment.png" alt="fork-project-for-new-experiment" style="zoom:33%;" />
+
+Du point de vue de `Git` il n'y aa pas de lien entre le projet d'origine et le projet `forké`.
+
+Si on veut tracker les changements du `repository` d'origine, on doit créer un nouveau `remote`, par convention appelé `upstream`.
+
+On a maintenant notre `repository` local avec deux `remotes`.
+
+<img src="assets/two-remote-better-than-one.png" alt="two-remote-better-than-one" style="zoom:50%;" />
+
+Ce qu'on ne peut toujours pas faire c'est pousser le `commit` vert vers `upstream`.
+
+`Github` permet d'envoyer un message au propriétaire du `repository` d'origine pour nous autoriser à pousser notre `commit` vers son dépôt. On appelle cela un `Pull Request`.
+
+<img src="assets/pull-request-finish-the-cycle.png" alt="pull-request-finish-the-cycle" style="zoom:50%;" />
+
+
+
