@@ -1,50 +1,56 @@
 #  01 Les objets de `Git`
 
-## `Porcelain` commands
+## `Git` est un `content tracker`
+
+Lorsque l'on créé un dépôt avec la commande `git init` la `db objects` est vide :
+
+<img src="assets/after-init-db-is-empty.png" alt="after-init-db-is-empty" />
+
+Avant de pouvoir ajouter des `objets` je dois d'abord les `tracker` avec `git add`.
+
+
+
+### `git status`
 
 ```bash
-git add
-git commit
-git push
-git pull
-git branch
-git switch # (git checkout)
-git merge
-git rebase
+git status
 ```
 
-`git switch` est une version récente remplaçant pour certaine fonction l'ancien `git checkout`. `git checkout` continu de fonctionner.
+<img src="assets/git-not-tracked-file.png" alt="git-not-tracked-file" />
 
-## `Plumbing` commends (`Plomberie`)
+Pour pouvoir exécuter un `commit` je dois d'abord ajouter les fichiers en `rouge` dans le `staging area` .
 
-Les briques composants les `Porcelain` commands.
+
+
+### `git add`
 
 ```bash
-git cat-file
-git hash-object
-git count-objects
+git add Recipies/*
 ```
-
-
-
-## La base de `Git`
-
-### C'est un stupide `tracker` de contenu
-
-### git - the stupid content tracker
 
 ```bash
-man git
-
-GIT(1)                            Git Manual                            GIT(1)
-
-NAME
-       git - the stupid content tracker
+git add menu.txt
 ```
 
-C'est un `map` persistant sur le disque, une table associative utilisant un `hash` comme clé.
+<img src="assets/adding-files-to-staging-area-git.png" alt="adding-files-to-staging-area-git" />
+
+Les fichiers sont maintenant en `vert`.
+
+Le `staging area` est comme une piste de lancement
 
 
+
+### `git commit`
+
+On peut maintenant créer un `commit` :
+
+```bash
+git commit -m "First commit"
+```
+
+<img src="assets/after-commit-objects-are-created.png" alt="after-commit-objects-are-created" />
+
+On a maintenant créer quelques objets dans la `DB Git`.
 
 
 
@@ -52,7 +58,7 @@ C'est un `map` persistant sur le disque, une table associative utilisant un `has
 
 <img src="assets/four-object-in-git-database.png" alt="four-object-in-git-database" />
 
-Il ya quatres sortes d'objets :
+Il y a quatres sortes d'objets :
 
 1. Les `blobs` (le contenu d'un fichier compressé)
 2. Les `trees` (des sortes de répertoires)
