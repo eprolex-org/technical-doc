@@ -126,7 +126,7 @@ echo "Apple Pie" | git hash-object --stdin -w
 
 <img src="assets/git-persistent-map-in-repo.png" alt="git-persistent-map-in-repo" />
 
-Dans le dossier `objects` on a maintenant un dossier dont le nom est composé des deux premier caractères du `hash` contenant un fichier dont le nom est lui composé du reste des caractères du `hash` (moins les deux premiers).
+Dans le dossier `objects` on a maintenant un dossier dont le nom est composé des deux premier caractères du `hash`, c'est à dire `23`, contenant un fichier dont le nom est lui composé du reste des caractères du `hash` (moins les deux premiers).
 
 Le dossier `objects` est la base de données de `git`.
 

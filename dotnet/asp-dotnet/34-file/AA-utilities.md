@@ -75,3 +75,11 @@ using var sr = new StreamReader(filePath);
 var output = sr.ReadToEnd();
 ```
 
+
+
+### Déplacer un fichier `File.Move`
+
+```cs
+File.Move(cheminDepartt, cheminArrive);
+```
+

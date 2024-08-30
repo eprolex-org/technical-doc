@@ -56,15 +56,16 @@ while (!reader.EndOfStream)
 > while (!reader.EndOfStream)
 > {
 >     var line = reader.ReadLine()
->     
->     bool isLastLine = reader
+> 
+>     bool isLastLine = reader.EndOfStream;
+> 
 >     if(isLastLine)
 >     {
->         writer.Write(line);
+>      	writer.Write(line);
 >     }
 >     else
 >     {
->         writer.WriteLine(line);
+>      	writer.WriteLine(line);
 >     } 
 > }
 > ```

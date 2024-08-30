@@ -42,7 +42,7 @@ kms: Desktop $ ls /Volumes/
 Macintosh HD	infcel
 ```
 
-Sur Os X les disques sont montés dans le répertoire `/Volumes` 
+Sur `Os X` les disques sont montés dans le répertoire `/Volumes` 
 
 ## Automatiser le montage du disque réseau
 
