@@ -98,7 +98,11 @@ committer hukar <k.meshoub@gmail.com> 1725026700 +0200\n
 first commit\n
 ```
 
+`1724924299`  : C'est le timestamp UNIX, qui représente le nombre de secondes écoulées depuis le 1er janvier 1970 à minuit (UTC).
 
+`+0200`  : C'est le décalage par rapport à l'heure UTC. Ici, `+0200` signifie que l'heure locale est en avance de 2 heures par rapport à l'UTC.
+
+Le timestamp `1724924299` correspond à la date et l'heure suivantes : `29 août 2024 à 09:38:19` (UTC).
 
 ## Contenu d'un `Tree`
 
@@ -156,6 +160,103 @@ Un `blob` n'est pas vraiment un fichier, mais le contenu d'un fichier. Les permi
 Voilà ce qu'on observe dans une base de données `Git`:
 
 <img src="assets/object-linked-in-database.png" alt="object-linked-in-database" />
+
+
+
+## `parent` d'un `commit`
+
+Si on créé plusieurs `commit`, ils seront relié les uns aux autres par la notion de parent :
+
+```bash
+git log
+
+commit d4aa04b370241f06bbfb028f8d3bbf27911cc2ca (HEAD -> master)
+Author: hukar <k.meshoub@gmail.com>
+Date:   Tue Sep 3 10:27:00 2024 +0200
+
+    ajout de la recette du couscous
+
+commit 33b1f701053df48ef7d6b898776d6d984f22b7dc
+Author: hukar <k.meshoub@gmail.com>
+Date:   Thu Aug 29 11:38:19 2024 +0200
+
+    First commit
+```
+
+Si je regarde le contenu du dernier commit :
+
+```bash
+git cat-file -p d4aa04b370241f06bbfb028f8d3bbf27911cc2ca
+
+tree 47097b4fbf472af295bfd02ef799e2b0c9cb9177
+parent 33b1f701053df48ef7d6b898776d6d984f22b7dc
+author hukar <k.meshoub@gmail.com> 1725352020 +0200
+committer hukar <k.meshoub@gmail.com> 1725352020 +0200
+
+ajout de la recette du couscous
+```
+
+On voit comme parent le `hash` du commit précédent : `33b1f701053df48ef7d6b898776d6d984f22b7dc`.
+
+Si on regarde vers quel `tree` pointe le premier `commit`, on se rend compte que ce n'est pas le même :
+
+```bash
+git cat-file -p 33b1f70
+
+tree 88f46706132538064a3e59decba2d4f3de394f61
+```
+
+> Seule les premiers chiffres du `hash` peuvent suffire pour identifier un objet.
+
+C'est normal, le `blob` représentant le contenu de `menu.txt` ayant changé, même si le `tree` est constitué par les mêmes éléments, le `hash` de `menu.txt` est lui différent :<img src="assets/representation-tree-parent-different-hashes.png" alt="representation-tree-parent-different-hashes" />
+
+`Git` réutilise les parties inchangées, il gère ainsi efficacement le stockage de ses `objets`.
+
+
+
+### `git count-objects`
+
+Pour connaître le nombre d'`objets` dans sa base de données on a la commande `git count-objects` :
+
+```bash
+git count-objects
+9 objects, 36 kilobytes
+```
+
+`Git` possède aussi des optimisations pour ne sauvegarder que les lignes modifiées pour les gros fichiers, il peut aussi comprésser plusieurs fichiers dans le même fichier physique.
+
+
+
+## `Annotated Tag`
+
+Un `tag` est un simple marqueur sur un `commit`. Un `Annotated tag` lui contient en plus un `message`, l'auteur de l'`annotated tag` ainsi que la date. Il a donc besoin d'un `objet` pour stocker ses données.
+
+<img src="assets/annotated-tag-object-in-schema.png" alt="annotated-tag-object-in-schema" />
+
+### Créer un `annotated tag`
+
+```bash
+git tag my_super_tag -a -m "an annotated tag for you"
+```
+
+
+
+### Contenu d'un `annotated tag`
+
+```bash
+git cat-file -p d94fcafccadea4714f31b28f4c5cdabecee64a68
+
+object d4aa04b370241f06bbfb028f8d3bbf27911cc2ca
+type commit
+tag my_super_tag
+tagger hukar <k.meshoub@gmail.com> 1725354149 +0200
+
+an annotated tag for you
+```
+
+On récupère le `hash` dans le dossier `.git` :
+
+<img src="assets/hash-annotated-tag-recuperation-file-system-git.png" alt="hash-annotated-tag-recuperation-file-system-git" />
 
 
 
