@@ -45,3 +45,90 @@ await connection.DisposeAsync();
 <img src="assets/syncrho-various-clients.png" alt="syncrho-various-clients" />
 
 Les deux onglets ainsi que la `console` sont synchronisés.
+
+
+
+## `InvokeAsync` et `SendAsync`
+
+### `InvokeAsync` permet de récupérer des données de la méthode appelée dans le `Hub`.
+
+`MyHub.cs`
+
+```cs
+
+public class MyHub : Hub
+{
+    public string SendMessageToComponent(string something)
+    {
+       // ...
+
+        return $"Ok mon copain j'ai reçu {something}";
+    }
+}
+```
+
+Dans un composant `client`
+
+```cs
+private async Task DoSomething()
+{
+	// ...
+
+    if (connection is not null)
+    {
+        var message = await connection.InvokeAsync<string>("SendMessageToComponent", "une donnée au pif!!!");
+        Console.WriteLine($"message dans AppFilter: {message}");
+    }
+}
+```
+
+```
+message dans AppFilter: Ok mon copain j'ai reçu une donnée au pif!!!
+```
+
+Si à la place de `InvokeAsync` j'utilise `SendAsync`, cela génère une erreur de compilation :
+
+<img src="assets/error-with-send-async-return-data.png" alt="error-with-send-async-return-data" />
+
+### `SendAsync` s'utilise lorsque la méthode du `Hub` ne retourne rien, elle est alors plus performante que `InvokeAsync`.
+
+`MyHub.cs`
+
+```cs
+public class MyHub : Hub
+{
+    public void DoSomethingOnTheHub(string something)
+    {
+       Console.WriteLine($"on the hub: {something}");
+    }
+}
+```
+
+Dans un composant `client` :
+
+```cs
+private async Task DoSomething()
+{
+	// ...
+
+	if (connection is not null)
+    {
+        await connection.SendAsync("SendFiltersTolist", "une donnée au pif!!!");
+    }
+}
+```
+
+```
+on the hub: une donnée au pif!!!
+```
+
+
+
+
+
+
+
+
+
+
+
