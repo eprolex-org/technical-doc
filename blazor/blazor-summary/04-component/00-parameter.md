@@ -157,7 +157,11 @@ Les `EventCallback` sont utilisé avec les gestionnaire d'événement utilise `I
 	[Parameter] public Func<string, IEnumerable<string>>? ValidateBy { get; set; }  
 ```
 
-
+> ## Différence entre `Action<Movie>` et `EventCallback`
+>
+> Grosso-modo `EventCallback` est asynchrone et il prend en charge le rafraîchissement automatique (`StateHasChanged`). Dans la plupart des cas il vaut mieux utiliser `EventCallback` si on n'a pas besoin de données en retour.
+>
+> Sinon on utilise `Func<T, TResult>` ou en asynchrone `Func<T, Task<TResult>>`.
 
 
 
