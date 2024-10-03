@@ -58,6 +58,7 @@ group.MapPost("/add/{connectionId}",
     await context.Clients
         .Client(connectionId)
         .SendAsync(DocumentEvent.Added, document);
+    
     await context.Clients
         .AllExcept(connectionId)
         .SendAsync(DocumentEvent.ChangeNotifyed);
@@ -68,7 +69,31 @@ Grâce à `SignalR`, le `endpoint` notifie à l'expéditeur (`connectionID` uniq
 
 > Le `endpoint` pourrait traditionnellement renvoyer un `Results.Created`.
 
-
+> On pourrait aussi passer le `connectionId` par les `headers` de la requête :
+>
+> ```cs
+> group.MapPost("/add", 
+>     async (
+>         DocumentRepository repo,
+>         Document documentToAdd, 
+>         IHubContext<DocumentHub> context,
+>         [FromHeader] string connectionId
+>     ) =>
+> ```
+>
+> Et dans le `client` :
+>
+> ```cs
+>  client = Factory.CreateClient("APIClient");
+> 
+> client
+>     .DefaultRequestHeaders
+>     .Add("connectionId", Provider?.Connection?.ConnectionId ?? "0");
+> 
+> await client.PostAsJsonAsync("/add-item", Item);
+> ```
+>
+> 
 
 ## Côté `Client` 
 

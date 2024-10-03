@@ -113,7 +113,7 @@ private async Task LoadItems(string url)
     var response = await client.GetFromJsonAsync<GetItemsResponse>(url);
 
     _items = response?.Items ?? [];
-    _numberOfItems = response?.NumberOfItems ?? 0;public record GetItemsResponse(int NumberOfItems, List<Item> Items);
+    _numberOfItems = response?.NumberOfItems ?? 0;
 
     _isLoading = false;
 }
@@ -211,7 +211,7 @@ public void OnFiltering()
     if (!_statuts.Any()) return;
 
     _isNotFiltered = false;
-    OnFiltersChanged.InvokeAsync(ConcatStatuts());
+    OnFiltersChanged.InvokeAsync(ConcatFilters());
 }
 ```
 
@@ -221,6 +221,8 @@ Si un ou plusieurs `statuts` sont sélectionnes on avertit le composant parent  
 private void CancelFilteringList()
 {
     _statuts = new HashSet<string>();
+    // remettre à zéro tous les filtres
+    
     _isNotFiltered = true;
     OnFiltersChanged.InvokeAsync("");
 }
@@ -230,10 +232,10 @@ On prévient `FilteredList` qu'il n'y a plus de `filters`. Cela affiche la liste
 
 
 
-### Récupérer la liste des `filters` : `ConcatStatuts`
+### Récupérer la liste des `filters` : `ConcatFilters`
 
 ```cs
-private string ConcatStatuts() => _statuts.Any() 
+private string ConcatFilters() => _statuts.Any() 
         ? string.Join(",", _statuts)
         : "";
 ```
