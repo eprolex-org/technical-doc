@@ -48,6 +48,50 @@ Les deux onglets ainsi que la `console` sont synchronisés.
 
 
 
+## `HttpConnectionOptions`
+
+On a accès à des `options` de configuration lors de la création de notre `HUbConnection` :
+
+```cs
+Connection ??= new HubConnectionBuilder()
+    .WithUrl("http://localhost:8080/demande-hub"
+        , options =>
+        {
+            options.Transports = HttpTransportType.WebSockets;
+            options.SkipNegotiation = true;
+            options.Headers.Add("Utilisateur-Id", "2");
+        }
+    )
+    .Build();
+```
+
+On peut forcer le protocole de `Transport` avec `HttpTransportType.WebSockets`.
+
+On peut sauter la phase de négociation avec `SkipNegociation`, mais attention dans ce cas on ne reçoit plus le `connectionId`.
+
+On peut aussi ajouter des `headers` à la requête `GET` qui initie la `connection` de `SignalR`.
+
+<img src="assets/signal-r-options-config-list.png" alt="signal-r-options-config-list" />
+
+
+
+## Ajouter `Serilog` à la `Connection` : 
+
+### `ConfigureLogging(c => c.AddSerilog())`
+
+```cs
+Connection ??= new HubConnectionBuilder()
+            .WithUrl("http://localhost:8080/demande-hub"
+                // ...
+            )
+            .ConfigureLogging(c => c.AddSerilog())
+            .Build();
+```
+
+<img src="assets/serilog-hub-signal-r-client-connection.png" alt="serilog-hub-signal-r-client-connection" />
+
+
+
 ## `InvokeAsync` et `SendAsync`
 
 ### `InvokeAsync` permet de récupérer des données de la méthode appelée dans le `Hub`.
