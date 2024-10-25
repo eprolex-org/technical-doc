@@ -86,7 +86,61 @@ Permet de styliser les infos du fichier sélectionné grâce à la variable four
 
 
 
+## Bug `Cannot read properties of null`
 
+Si on a cette configuration :
+
+```react
+@if (_isAdding)
+{
+	<EpLoader Text="Mandat is adding ..."/>
+}
+else
+{
+    <MudFileUpload T="IBrowserFile" FilesChanged="AddMandat">
+        <ActivatorContent>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.CloudUpload">
+                Ajouter un mandat
+            </MudButton>
+        </ActivatorContent>
+    </MudFileUpload>
+}
+```
+
+On va lever une `Exception` :
+
+```
+My File Upload Exception: Microsoft.JSInterop.JSException: Cannot read properties of null (reading '_blazorFilesById')
+TypeError: Cannot read properties of null (reading '_blazorFilesById')
+// ...
+```
+
+La raison c'est qu'on démonte le composant contenant un `InputFile` avnat qu'on ai eu le temps de lire certaine infos.
+
+Documenté : https://stackoverflow.com/questions/65973850/cannot-read-property-blazorfilesbyid-of-null-error-with-blazor-inputfile-co
+
+On doit plutôt organiser son code comme ceci :
+
+```react
+<MudFileUpload T="IBrowserFile" FilesChanged="AddMandat">
+    <ActivatorContent>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.CloudUpload">
+            Ajouter un mandat
+        </MudButton>
+    </ActivatorContent>
+</MudFileUpload>
+
+@if (_isAdding)
+{
+    <EpLoader Text="Mandat is adding ..."/>
+}
+```
+
+Le problème alors disparait.
 
 
 
