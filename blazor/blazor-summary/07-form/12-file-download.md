@@ -4,10 +4,10 @@ Il faut un `endpoint` qui recherche et renvoie un `Results.File` et un bouton av
 
 
 
-## Le endpoint
+## Le `endpoint`
 
 ```cs
-app.MapGet("/file/upload/{documentId}", (int documentId, DocumentRepository repo) =>
+app.MapGet("/file/dowload/{documentId}", (int documentId, DocumentRepository repo) =>
 {
     var document = repo.GetDocumentById(documentId)
     
@@ -49,7 +49,7 @@ L'implémentation de `Document` et `DocumentRepository` n'a pas d'importance ici
     Color="Color.Primary"
     Target="_blank"
     StartIcon="@Icons.Material.Filled.RemoveRedEye"
-    Href="@($"/file/upload/{MyDocument.Id}")">
+    Href="@($"/file/download/{MyDocument.Id}")">
     Voire le fichier
 </MudButton>                                           
 ```

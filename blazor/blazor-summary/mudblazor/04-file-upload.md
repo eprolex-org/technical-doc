@@ -117,7 +117,7 @@ TypeError: Cannot read properties of null (reading '_blazorFilesById')
 // ...
 ```
 
-La raison c'est qu'on démonte le composant contenant un `InputFile` avnat qu'on ai eu le temps de lire certaine infos.
+La raison c'est qu'on démonte le composant contenant un `InputFile` avant qu'on ait eu le temps de lire certaine infos.
 
 Documenté : https://stackoverflow.com/questions/65973850/cannot-read-property-blazorfilesbyid-of-null-error-with-blazor-inputfile-co
 
