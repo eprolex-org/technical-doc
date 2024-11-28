@@ -1,6 +1,6 @@
 # 01 Les commandes les plus utilisées `DOTNET CLI`
 
-`dotnet restore` génère les dépendances `bin` et `obj`
+`dotnet restore` génère les dépendances `bin` et `obj`.
 
 `dotnet run Program.cs` lance un `restore` et un `build` avant de lancer le programme.
 

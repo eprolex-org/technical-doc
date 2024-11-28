@@ -40,6 +40,16 @@ using var response = await client.GetAsync("/download", HttpCompletionOption.Res
 
 Seul les `headers` sont mis en `cache`, après trois téléchargements le poids mémoire n'a pas bougé. L'`API` (`PID: 50912`) reste aussi légère en mémoire.
 
+> Afficher le `PID`
+>
+> ```cs
+> Console.WriteLine($"Process Id: {Environment.ProcessId}");
+> 
+> app.Run();
+> ```
+
+
+
 ### Code complet `Client` avec `GetAsync`
 
 ```cs
