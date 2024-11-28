@@ -40,11 +40,11 @@ dotnet add package Microsoft.AspNetCore.SignalR.Client
 
 ```cs
 hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
-        {
-            var encodedMsg = $"{user}: {message}";
-            messages.Add(encodedMsg);
-            StateHasChanged();
-        });
+{
+    var encodedMsg = $"{user}: {message}";
+    messages.Add(encodedMsg);
+    StateHasChanged();
+});
 ```
 
 On doit préciser les types de ce qui sera reçu : `On<string, string>`.

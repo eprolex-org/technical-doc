@@ -18,6 +18,12 @@ La liste se met alors à jour avec les données reçu de l'`API` via `SignalR`.
 
 
 
+## Résumé de l'implémentation
+
+<img src="assets/signalr-pattern-summary-schema-ok.png" alt="signalr-pattern-summary-schema-ok" />
+
+
+
 ## Implémentation simple : Côté `API`
 
 On doit avoir un `Hub` même si celui-ci est vide :
@@ -50,7 +56,7 @@ group.MapPost("/add/{connectionId}",
         DocumentRepository repo,
         Document documentToAdd, 
         IHubContext<DocumentHub> context,
-        string connectionId
+        [FromHeader(Name = "Connection-Id")] string connectionId
     ) =>
 {
     var document = await repo.AddAsync(documentToAdd);
@@ -77,7 +83,7 @@ Grâce à `SignalR`, le `endpoint` notifie à l'expéditeur (`connectionID` uniq
 >         DocumentRepository repo,
 >         Document documentToAdd, 
 >         IHubContext<DocumentHub> context,
->         [FromHeader] string connectionId
+>         [FromHeader(Name = "Connection-Id")] string connectionId
 >     ) =>
 > ```
 >
@@ -88,7 +94,7 @@ Grâce à `SignalR`, le `endpoint` notifie à l'expéditeur (`connectionID` uniq
 > 
 > client
 >     .DefaultRequestHeaders
->     .Add("connectionId", Provider?.Connection?.ConnectionId ?? "0");
+>     .Add("Connection-Id", Provider?.ConnectionId ?? "0");
 > 
 > await client.PostAsJsonAsync("/add-item", Item);
 > ```

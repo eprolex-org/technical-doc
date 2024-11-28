@@ -83,3 +83,10 @@ var output = sr.ReadToEnd();
 File.Move(cheminDepartt, cheminArrive);
 ```
 
+Fonctionne sur un disque réseau (Samba)
+
+```cs
+var networkFolder = $"/Users/kms/w/Eprolex/networkFolder/{fileName}";
+File.Move(startFolder, networkFolder);
+```
+
