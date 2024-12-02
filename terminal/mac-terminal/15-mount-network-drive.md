@@ -2,11 +2,11 @@
 
 ## `mount`
 
-Dans un réseau windows les diques réseau sont disponnible grâce au protocole samba.
+Dans un réseau windows les disques réseau sont disponible grâce au protocole samba.
 
 #### `mount -t smbfs //MACHINENAME/SHARENAME ./MYDIRECTORY` 
 
-```bash
+```bash hl:2
 mkdir w
 mount -t smbfs //raadvst-consetat.be/shared/infcel ./w
 Password for raadvst-consetat.be: 
