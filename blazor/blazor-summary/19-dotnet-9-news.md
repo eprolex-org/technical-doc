@@ -42,3 +42,22 @@ devient :
     <link href="@Assets["_content/MudBlazor/MudBlazor.min.css"]" rel="stylesheet"/>
 ```
 
+
+
+## L'`index` dans une boucle `foreach` avec `.Index()`
+
+Avant pour obtenir l'`index` dans une boucle `foreach` on utilisait `Select` :
+
+```cs
+foreach (var (titre, index) in _titresAvailable.Select((titre, index) => (titre, index)))
+{
+```
+
+Maintenant on peut simplifier la syntaxe grâce à `.Index()` :
+
+```csharp
+foreach (var (index, titre) in _titresAvailable.Index())
+{
+```
+
+> Il faut juste faire attention à l'ordre du `tuple` : `(index, value)`.

@@ -92,6 +92,46 @@ Si on fait un nouveau `commit` maintenant on arrive à cette situation :
 
 <img src="assets/branches-divergence-afetr-commits.png" alt="branches-divergence-afetr-commits" />
 
+
+
+## Supprimer une `Branch`
+
+### Localement
+
+```bash
+# Passer sur l'axe principal
+git switch main
+
+# Supprimer une branche localement
+git branch -d feature-xyz
+```
+
+
+
+###  Dépôt distant (`Github`)
+
+```bash
+# Supprimer la même branche sur le dépôt distant
+git push origin --delete feature-xyz
+```
+
+ou avec l'interface graphique :
+
+![delete-branch-github-desktop](assets/delete-branch-github-desktop.png)
+
+Click droit sur la `branch` à supprimer puis `delete...`.
+
+
+
+### Vérifier les `branch`
+
+```bash
+git branch          # Affiche les branches locales
+git branch -r       # Affiche les branches distantes
+```
+
+
+
 ## Trois règles
 
 - La `branch` courante suit les `commits`.

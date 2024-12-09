@@ -1,5 +1,51 @@
 # 00 Configurer git
 
+## Lister les configurations
+
+Toutes les configurations
+
+```bash
+git config --list
+```
+
+ou bien plus spécifique :
+
+```bash
+git config --local --list
+git config --global --list
+git config --system --list
+```
+
+
+
+### Voire l'origine d'une règle
+
+```bash
+git config --list --show-origin
+```
+
+```
+file:/usr/local/etc/gitconfig   credential.helper=osxkeychain
+file:/Users/kms/.gitconfig      user.email=k.meshoub@gmail.com
+file:/Users/kms/.gitconfig      user.name=hukar
+file:/Users/kms/.gitconfig      filter.lfs.required=true
+file:/Users/kms/.gitconfig      filter.lfs.clean=git-lfs clean -- %f
+file:/Users/kms/.gitconfig      filter.lfs.smudge=git-lfs smudge -- %f
+file:/Users/kms/.gitconfig      filter.lfs.process=git-lfs filter-process
+file:/Users/kms/.gitconfig      core.autocrlf=false
+```
+
+
+
+### Inspecter une configuration spécifique
+
+```bash
+git config core.autocrlf
+false
+```
+
+
+
 ## Changer Vi par VsCode comme éditeur par défaut
 
 **Vi** est l'éditeur par défaut de git.
