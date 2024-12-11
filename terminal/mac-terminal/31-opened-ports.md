@@ -12,7 +12,7 @@ API     72672 hukar  239u  IPv4 0x690f4611a650ec0b      0t0  TCP localhost:5238 
 API     72672 hukar  240u  IPv6 0x690f4608180b1803      0t0  TCP localhost:5238 (LISTEN)
 ```
 
-Une fois le `PID` obtenu on peut *killer* le processus via `Activity Monitor` par exemple.
+Une fois le `PID` obtenu on peut *killer*  le processus via `Activity Monitor` par exemple.
 
 
 
