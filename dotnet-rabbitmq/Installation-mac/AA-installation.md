@@ -10,6 +10,16 @@ brew update
 brew install rabbitmq
 ```
 
+Si on doit mettre à jour
+
+```bash
+brew services stop rabbitmq
+
+brew update
+
+brew upgrade
+```
+
 Ensuite pour rendre disponible les commandes on ouvre le fichier `.zshcr` :
 
 ```bash
@@ -50,6 +60,19 @@ Il est aussi recommandé d'activer les `flags` :
 rabbitmqctl enable_feature_flag all
 Enabling all feature flags ...
 ```
+
+J'ai dû faire :
+
+```bash
+/usr/local/sbin/rabbitmqctl enable_feature_flag all
+```
+
+> Grâce à `where` j'ai pu trouver la localisation de `rabbitmqctl` :
+>
+> ```bash
+> ❯ where rabbitmqctl
+> /usr/local/sbin/rabbitmqctl
+> ```
 
 Pour vérifier que le `service` tourne :
 

@@ -91,6 +91,16 @@ C'est la façon la plus sûre de procéder.
 
 Retourne `false` si l'objet testé est `null` (si le retour de l'expression est `null`).
 
+> Il y a un test puis une assignation, `is`  est équivalent au code suivant beaucoup plus long :
+>
+> ```cs
+> if (StaticObject.Hukar as Person is not null) {
+> 	Person hukar = (Person)StaticObject.Hukar;
+> 
+> 	Console.WriteLine($"hukar fullname : {hukar.FullName}");
+> }
+> ```
+
 
 
 ## Test de performance : `BenchmarkDotnet`
