@@ -1,5 +1,3 @@
-
-
 # 09 `Cascading Parameter`
 
 Cela permet de rendre accessible des données à tous les décendants.
