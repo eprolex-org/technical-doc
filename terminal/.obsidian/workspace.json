@@ -1,0 +1,174 @@
+{
+  "main": {
+    "id": "77645a2100cbc212",
+    "type": "split",
+    "children": [
+      {
+        "id": "7200611a435f579b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3367e459b3ec5028",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "mac-terminal/15.1-adresse-unc.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "15.1-adresse-unc"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f123dd3d92d7a140",
+    "type": "split",
+    "children": [
+      {
+        "id": "be455ab8ad7f1908",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7126ed4f5670333d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorateur de fichiers"
+            }
+          },
+          {
+            "id": "b689c21a9d1bccbf",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Rechercher"
+            }
+          },
+          {
+            "id": "da00ee5f36192e19",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Signet"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 292.5086555480957
+  },
+  "right": {
+    "id": "f1a39efb893fc592",
+    "type": "split",
+    "children": [
+      {
+        "id": "ed93ac8edc87a4dc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "696b0053d0c89e39",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "mac-terminal/15.1-adresse-unc.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Rétrolien pour 15.1-adresse-unc"
+            }
+          },
+          {
+            "id": "ec3e9c36bc762279",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "mac-terminal/15.1-adresse-unc.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Liens sortants de 15.1-adresse-unc"
+            }
+          },
+          {
+            "id": "4db39d156bc45d11",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Mots-clés"
+            }
+          },
+          {
+            "id": "065bd396ef17e2f8",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "mac-terminal/15.1-adresse-unc.md"
+              },
+              "icon": "lucide-list",
+              "title": "Plan de 15.1-adresse-unc"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Ouvrir le sélecteur rapide": false,
+      "graph:Ouvrir la vue graphique": false,
+      "canvas:Créer une nouvelle toile": false,
+      "daily-notes:Ouvrir la note quotidienne": false,
+      "templates:Insérer le modèle": false,
+      "command-palette:Ouvrir la palette de commandes": false
+    }
+  },
+  "active": "7126ed4f5670333d",
+  "lastOpenFiles": [
+    "mac-terminal/02-files-folders.md",
+    "mac-terminal/15.1-adresse-unc.md",
+    "mac-terminal/03-access-file-folder.md",
+    "mac-terminal/14-drive-capacity.md",
+    "mac-terminal/19-retrouver-chemin-app.md",
+    "mac-terminal/15-mount-network-drive.md"
+  ]
+}

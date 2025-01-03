@@ -87,3 +87,61 @@ Pour le moment en `preview` :
 </Project>
 ```
 
+Permet de se passer de la déclaration d'un champs privé :
+
+```cs
+public class StateService
+{
+    public bool IsDarkMode
+    {
+        get;
+
+        set
+        {
+            field = value;
+            NotifyStateChanged();
+        }
+    }
+// ...
+}
+```
+
+au lieu de 
+
+```cs
+public class StateService
+{
+    private bool _isDarkMode;
+
+    public bool IsDarkMode
+    {
+        get => _isDarkMode;
+
+        set
+        {
+            _isDarkMode = value;
+            NotifyStateChanged();
+        }
+    }
+```
+
+
+
+## L'`index` dans une boucle `foreach` avec `.Index()`
+
+Avant pour obtenir l'`index` dans une boucle `foreach` on utilisait `Select` :
+
+```cs
+foreach (var (titre, index) in _titresAvailable.Select((titre, index) => (titre, index)))
+{
+```
+
+Maintenant on peut simplifier la syntaxe grâce à `.Index()` :
+
+```csharp
+foreach (var (index, titre) in _titresAvailable.Index())
+{
+```
+
+> Il faut juste faire attention à l'ordre du `tuple` : `(index, value)`.
+
