@@ -174,16 +174,6 @@ Unhandled exception. System.NullReferenceException: Object reference not set to 
 
 
 
-### `Positional` pattern
-
-Utilisé avec la `Deconstruct Method`.
-
-
-
-### `Tuple` pattern
-
-
-
 ### `Property` pattern et `Relational` pattern
 
 Plus grand ou plus petit que.
@@ -234,6 +224,62 @@ var result = fruit switch
 
 
 
+### `Tuple` pattern
+
+```cs
+class Item
+{
+    public string Name { get; set; } = string.Empty;
+    public int Strenght { get; set; }
+
+    public void Deconstruct(out string n, out int s) {
+        n = Name;
+        s = Strenght;
+    }
+}
+```
+
+
+
+```cs
+string EvaluateStrenght(Item item) => item switch
+{
+    ("Item 1", > 100) => "Item 1 tu es fort {item.Strenght}",
+    (_, < 0) => $"...",
+    (_, >=0 and <=100) => $"...",
+    var (n, s) when n.Contains(s.ToString()) => $"...",
+    _ => "??????"
+};
+```
+
+#### équivalent avec `property pattern`
+
+```cs
+string EvaluateStrenghtTwo(Item item) => item switch
+{
+    { Name: "Item 1", Strenght: > 100 } => $"...",
+    { Strenght: < 0 } => $"...",
+    { Strenght: >= 0 and <= 100 } => $"...",
+    Item { } when item.Name.Contains(item.Strenght.ToString()) 
+        => $"...",
+    _ => "??????"
+};
+```
+
+#### Création d'un `tuple` on the fly
+
+```cs
+string CompareThree(int a, int b, int c) => (a, b, c) switch
+{
+    (4, 5, 6) or (1, 2, 3) => "You win 100",
+    (6, 6, 6) or (3, 3, 3) => "You win 200",
+    (_, 6, 6) or (6, _, 6) or (6, 6, _) => "You win 50",
+    _ => "You lose",
+};
+```
+
+Le `tuple` `(a, b, c)` est créé, sur base des `paramètres` fournis à la méthode, par l'expression `switch`.
+
 
 
 ### Conjonctif `"and"` pattern
@@ -271,6 +317,50 @@ if(payloads is ["orange", _, .. var slice])
 ```
 slice element one cherry
 ```
+
+### On peut utiliser les `comparaison` : `>`, `<`, `<=`, `>=`
+
+```cs
+List<int> numbers = [17, 2, 30, 24, 75];
+```
+
+```cs
+if(numbers is [> 10, 2, ..]) ...
+
+if(numbers is [> 100, 2, ..]) ...
+
+if(numbers is [>= 17, _, 30, ..]) ...
+
+if(numbers is [< 100, _, <=30, ..]) ...
+
+```
+
+
+
+### La tête (`head`) et la queue (`tail`)
+
+```cs
+if (numbers is [var h, .. var t]) {
+    Console.WriteLine($"Head is {h}");
+    Console.Write("[");
+    foreach (var nb in t) Console.Write(nb + ", ");
+    Console.WriteLine("]");
+}
+```
+
+
+
+#### Utilisation récursive du `list pattern`
+
+```cs
+int Sum(Span<int> listOfNumbers) => listOfNumbers switch
+{
+    [] => 0,
+    [var x, .. var tails] => x + Sum(tails),
+};
+```
+
+`Span<T>` résout ici un problème de performance qu'on aurait avec un `Array<T>`.
 
 
 
