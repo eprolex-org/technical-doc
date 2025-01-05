@@ -28,7 +28,8 @@ Cette méthode pourrait-être appelée par un `Client` à l'arrivée sur une pag
 
 protected override async Task OnInitializedAsync()
 {
-    await Connection.SendAsync("AddToGroup", groupName); // groupName = demandeId
+    // groupName = demandeId
+    await Connection.SendAsync("AddToGroup", groupName); 
 ```
 
 ### Utilisation du `Group` dans le `Hub`
