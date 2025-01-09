@@ -22,6 +22,8 @@ QuestPDF.Settings.License = LicenseType.Community;
 
 ### Utiliser le `Companion`
 
+https://www.questpdf.com/companion/download.html
+
 Il suffit de télécharger le logiciel et d'ajouter ceci en combinaison avec le `hot-reload` :
 
 ```cs
