@@ -41,6 +41,10 @@ L'implémentation de `Document` et `DocumentRepository` n'a pas d'importance ici
 
 ## Comportement de `Results.File`
 
+> Dans les exemples suivants,  `pdf` est un `byte[]` généré par `QuestPDF`.
+>
+> `Results.File` accepte soit un `string path`, soit un `Stream fileStream`, soit encore un `byte[] contents`.
+
 Si je passe seulement deux arguments à `File` :
 
 ```cs
