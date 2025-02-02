@@ -47,34 +47,78 @@ public async Task OnChangeHandle(InputFileChangeEventArgs args)
 }
 ```
 
-### ! Obligatoirement gérer les `exceptions`
+### 
+
+> ## Problème avec `@if`
+>
+> <img src="assets/if-loaader-else-mudfileupload.png" alt="if-loaader-else-mudfileupload" />
+>
+> Dans la plupart des cas, lorsqu'une action asynchrone est lancée, un composant `loader` est affiché à la place d'un bouton ou d'une liste le temps que l'action finisse.
+>
+> ```
+> My File Upload Exception: Microsoft.JSInterop.JSException: Cannot read properties of null (reading '_blazorFilesById')
+> TypeError: Cannot read properties of null (reading '_blazorFilesById')
+> ```
+>
+> Le problème avec `MudFileUpload`, c'est que la balise `input type=file` sous-jacente contient le lien vers le `stream` du fichier chez le client. En supprimant le composant pour afficher le loader, on supprime également ce lien (cette référence).
+>
+> ### Solution
+>
+> Il suffit de réorganiser son code pour ne pas retirer le composant `MudFileUpload` lors du chargement du fichier :
+>
+> ```html
+> <MudFileUpload>
+> 
+>     <ActivatorContent>
+> 
+>         @if (_isAdding)
+>         {
+>             <EpLoader/>
+>         }
+>         else
+>         {
+>             <MudButton>
+>                 Télécharger un mandat
+>             </MudButton>
+>         }
+> 
+>     </ActivatorContent>
+> 
+> </MudFileUpload>
+> ```
+>
+> 
+
+
 
 > ## Gérer les `exceptions`
+>
+> ### ! Obligatoirement gérer les `exceptions`
 >
 > Dans `Blazor Server` les `exceptions` ne sont pas automatiquement remontées dans la console, il faut donc gérer manuellement le log des problèmes :
 >
 > ```cs 
 > public async Task OnChangeHandle(InputFileChangeEventArgs args)
 > {
->     try
->     {
->         IBrowserFile file = args.File;
+>  try
+>  {
+>      IBrowserFile file = args.File;
 > 
->         var uploadPath = Path.Combine(
->             Environment.CurrentDirectory,
->             "UploadedFiles",
->             $"{DateTime.Now.Ticks}-{file.Name}"
->         );
+>      var uploadPath = Path.Combine(
+>          Environment.CurrentDirectory,
+>          "UploadedFiles",
+>          $"{DateTime.Now.Ticks}-{file.Name}"
+>      );
 > 
->         await using var fs = File.Create(uploadPath);
+>      await using var fs = File.Create(uploadPath);
 > 
->         await file.OpenReadStream().CopyToAsync(fs);
->     }
->     catch (Exception e)
->     {
->         Console.WriteLine("Exception launched " + e);
->         throw;
->     }
+>      await file.OpenReadStream().CopyToAsync(fs);
+>  }
+>  catch (Exception e)
+>  {
+>      Console.WriteLine("Exception launched " + e);
+>      throw;
+>  }
 > }
 > ```
 >
