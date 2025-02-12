@@ -77,7 +77,33 @@ Et le résultat :
 
 
 
+## Lier des `css` depuis une RCL (`Razor Class Library`)
 
+Mon dossier `wwwroot` ains que `App.razor` se trouve dans une `RCL` appelée `ComponetLib`.
+
+Voici la syntaxe des différents liens :
+
+```html
+<head>
+    // ...
+    <link rel="stylesheet" href="@Assets["_content/MudBlazor/MudBlazor.min.css"]"/>
+    <link rel="stylesheet" href="@Assets["_content/ComponentLib/app.css"]"/>
+    <link rel="stylesheet" href="@Assets["_content/ComponentLib/ComponentLib.bundle.scp.css"]"/>
+```
+
+On a un pattern :
+
+### `_content/{AssemblyName}/monstyle.css` 
+
+pour les fichiers dans `wwwroot`.
+
+
+
+on a un pattern :
+
+### `_content/{AssemblyName}/{AssemblyName}.bundle.scp.css`
+
+au lieu de `BlazorServerUI.styles.css` pour les `css` scopés aux composants.
 
 
 
