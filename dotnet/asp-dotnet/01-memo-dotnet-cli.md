@@ -12,6 +12,44 @@
 
 
 
+## Lister les `packages` `outdated`
+
+```bash
+dotnet list package --outdated
+```
+
+
+
+## Mettre à jour les `packages`
+
+Il faut que le nommage des versions utilise un `*` pour que ce soit possible, si la version est fixé alors il n'y a pas de mise à jour automatique :
+
+```xml
+<PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.1" /> // Pas de mise à jour
+<PackageReference Include="QuestPDF" Version="2024.12.*" /> // mise à jour
+<PackageReference Include="Serilog.AspNetCore" Version="9.*" /> // mise à jour
+```
+
+Ensuite il suffit de supprimer le `cache` contenant les `packages` :
+```bash
+dotnet nuget locals all --clear
+ 
+Clearing NuGet HTTP cache: /Users/kms/.local/share/NuGet/http-cache
+Clearing NuGet global packages folder: /Users/kms/.nuget/packages/
+Clearing NuGet Temp cache: /var/folders/vx/5w1xqp6j0w5b0kpl8hhjpgjc0000gn/T/NuGetScratch
+Clearing NuGet plugins cache: /Users/kms/.local/share/NuGet/plugin-cache
+Local resources cleared.
+```
+
+Et re-builder :
+```bash
+dotnet build
+```
+
+Les `packages` sont alors à jour.
+
+
+
 ## Changer la langue
 
 ```bash
