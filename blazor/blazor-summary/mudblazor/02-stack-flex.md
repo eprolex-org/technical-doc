@@ -14,6 +14,8 @@ Si je mets un `MudChip` dans une `MudStack`, celui-ci prend toute la largeur :
 
 <img src="assets/mudchip-stack-all-large.png" alt="mudchip-stack-all-large" />
 
+### `align-self-start`
+
 Pour que le `MudChip` ne prennent que la largeur nécessaire, on doit mettre la propriété `CSS` `align-self` à `flex-start`. On peut utiliser la classe `align-self-start` des `CSS utilities` :
 
 ```react
@@ -24,3 +26,30 @@ Pour que le `MudChip` ne prennent que la largeur nécessaire, on doit mettre la 
 ```
 
 <img src="assets/with-align-self-start-mudchip-wide.png" alt="with-align-self-start-mudchip-wide" />
+
+## De même avec un `MudButton` 
+
+###  `align-self-start`
+
+```react
+<MudStack>
+    
+    <MudButton
+        Class="align-self-start"
+        Variant="Variant.Filled"
+        Color="Color.Success"
+        OnClick="OnDocumentAdded">
+        Document is added
+    </MudButton>
+```
+
+<img src="assets/aalign-self-start-the-todo-greaat.png" alt="aalign-self-start-the-todo-greaat" />
+
+
+
+
+
+
+
+
+

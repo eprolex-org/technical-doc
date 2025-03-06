@@ -107,16 +107,25 @@ Password: `guest`
 Configurer `user` et `password`:
 
 ```bash
-$ docker run -it --rm --name my-rabbit -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=hukar -e RABBITMQ_DEFAULT_PASS=huk@r99_ rabbitmq:3.11-management
+$ docker run -it --rm --name my-rabbit -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=hukar -e RABBITMQ_DEFAULT_PASS=huk@r99_ rabbitmq:4.0-management
 ```
+
+> Avec les paramètres par défaut :
+>
+> ```bash
+> # latest RabbitMQ 4.0.x
+> docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0-management
+> ```
 
 Si l'image n'est pas présente localement, `docker` la télécharge.
 
 <img src="assets/docker-image-rabbit-mq-running.png" alt="docker-image-rabbit-mq-running" />
 
-`Docker` a installé la dernière version `3.11.9`.
+### ! Il faut spécifier les ports manuellement
 
-On se log comme précédemment.
+<img src="assets/ports-settings-rabbitmq.png" alt="ports-settings-rabbitmq" style="zoom: 25%;" />
+
+Sinon les ports du `Container` sont réassignés arbitrairement.
 
 
 
@@ -142,7 +151,7 @@ services:
 
 #### ! n'accepte pas les `tab` mais les `space` (2 par décalage).
 
- `management` pour avoir l'interface utilisateur
+ `management` pour avoir l'interface utilisateur.
 
 On défini deux `ports`, un pour l'instance de `RabbitMQ` et un pour l'`interface web`.
 
