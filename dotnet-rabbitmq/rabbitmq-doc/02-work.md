@@ -163,7 +163,7 @@ La deuxième syntaxe en commentaire peut aussi être utilisée pour éciter le w
 
 <img src="assets/warning-escape-channel-disposing.png" alt="warning-escape-channel-disposing" />
 
-Maintenat aucun message ne sera perdu :
+Maintenant aucun message ne sera perdu :
 
 <img src="assets/better-gestion-ack-message-lost.png" alt="better-gestion-ack-message-lost" />
 
@@ -242,11 +242,11 @@ for (var i = 0; i < 4; i++) {
 
 <img src="assets/difference-traitement-spedd-dispatch-equal.png" alt="difference-traitement-spedd-dispatch-equal" />
 
-La répartition étant équivalente sur chaque `worker` (même nombre de messages), avec la différence d'exécution, le `Worker` de droite a fini son. Travail (`message 52`) alors que le `worker` de gauche en est juste à `message 17`. 
+La répartition étant équivalente sur chaque `worker` (même nombre de messages), avec la différence d'exécution, le `Worker` de droite a fini son travail (`message 52`) alors que le `worker` de gauche en est juste à `message 17`. 
 
 ### `BasicQosAsync`
 
-On va utiliser cette méthode pour que les messages soient attribués un par un (et non pas dès qu'il arrive dans la `Queue` on le Nième message est attribué à la Nième Queue), c'est à dire que temps qu'un `Worker` procède un message et n'a pas envoyé son `Ack`, aucun nouveau message ne lui est attribué.
+On va utiliser cette méthode pour que les messages soient attribués un par un (et non pas que dès qu'il arrive dans la `Queue` on a le Nième message qui est attribué à la Nième Queue), c'est à dire que temps qu'un `Worker` procède un message et n'a pas envoyé son `Ack`, aucun nouveau message ne lui est attribué.
 
 Pour ce faire on utilise `prefetchCount` = `1`, ajouter ce code dans les `Workers` après la déclaration de la `queue` :
 
@@ -269,7 +269,7 @@ await channel.BasicQosAsync(
 
 <img src="assets/fair-dispatch-of-messages-prefetched.png" alt="fair-dispatch-of-messages-prefetched" />
 
-On peut voire que chaque `Worker` reçoit des message `pair` (rapide à traiter) et `impair` (plus long). Les deux `Workers` finissent quaasiment en même temps, il ne sont plus en train d'attendre que l'autre finisse.
+On peut voire que chaque `Worker` reçoit des message `pair` (rapide à traiter) et `impair` (plus long). Les deux `Workers` finissent quasiment en même temps, il ne sont plus en train d'attendre que l'autre finisse.
 
 
 
