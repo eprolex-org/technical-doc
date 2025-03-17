@@ -79,6 +79,20 @@ await using var channel = await connection.CreateChannelAsync();
 
 
 
+### gestion des erreurs dans le `Channel`
+
+```cs
+channel.CallbackExceptionAsync += (sender, @event) => {
+    Console.WriteLine("An exception was happened");
+
+    Console.WriteLine($"message dans CallbackExceptionAsync {@event.Exception.Message}");
+
+    return Task.CompletedTask;
+};
+```
+
+Remonte aussi les `exception` du `consumer`.
+
 ## La `Queue`
 
 ```cs
