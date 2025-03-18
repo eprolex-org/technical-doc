@@ -25,7 +25,7 @@ await using var connection = await factory.CreateConnectionAsync();
 ```cs
 var factory = new ConnectionFactory
 {
-    AutomaticRecoveryEnabled = true,
+    AutomaticRecoveryEnabled = true, // par défaut
     // ...
 };
 ```
@@ -91,7 +91,7 @@ channel.CallbackExceptionAsync += (sender, @event) => {
 };
 ```
 
-Remonte aussi les `exception` du `consumer`.
+Remonte aussi les `exception` du `consumer`. On peut centraliser les `log`. Ici.
 
 ## La `Queue`
 
@@ -127,3 +127,14 @@ Nombre de consumer(s) 2
 Nombre de message(s) 216
 ```
 
+
+
+### Paramètres de `queue`
+
+`queue` : nom de la `queue`.
+
+`durable` : persiste à un redémarage de `RabbitMQ`
+
+`exclusive` : exclusive à une seule `connexion`
+
+`autoDelete` : est automatiquement supprimée s'il n'y a plus de `consumer`
