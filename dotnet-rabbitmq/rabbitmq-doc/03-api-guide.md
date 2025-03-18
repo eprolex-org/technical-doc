@@ -93,7 +93,10 @@ channel.CallbackExceptionAsync += (sender, @event) => {
 
 Remonte aussi les `exception` du `consumer`. On peut centraliser les `log`. Ici.
 
-## La `Queue`
+
+
+## La `Queue` : `QueueDeclareAsync`
+
 
 ```cs
 await channel.QueueDeclareAsync(
@@ -130,6 +133,16 @@ Nombre de message(s) 216
 
 
 ### Paramètres de `queue`
+```cs
+Task<QueueDeclareOk> QueueDeclareAsync(
+    string queue = "",
+    bool durable = false,
+    bool exclusive = false,
+    bool autoDelete = false,
+    IDictionary<string, object>? arguments = null,
+    CancellationToken cancellationToken = default
+);
+```
 
 `queue` : nom de la `queue`.
 
@@ -138,3 +151,42 @@ Nombre de message(s) 216
 `exclusive` : exclusive à une seule `connexion`
 
 `autoDelete` : est automatiquement supprimée s'il n'y a plus de `consumer`
+
+
+
+## `Quality Of Service` : `BasicQosAsync`
+
+Définit comment les `messages` sont délivrés ax `consumers`
+
+
+```cs
+await _channel.BasicQosAsync(
+    prefetchSize: 0,
+    prefetchCount: processorCount,
+    global: false
+);
+```
+
+
+
+### Arguments
+```cs
+Task BasicQosAsync(
+    uint prefetchSize,
+    ushort prefetchCount,
+    bool global,
+    CancellationToken cancellationToken = default
+);
+```
+
+`prefetchSize` taille en octets maximale d'un `message`, `0` pas de limite.
+
+`prefetchCount` nombre maximale de `messages` non acquittés qu'un `consumer` peut recevoir avant d'envoyer un `ACK` .
+
+`global` s'applique seulement au `consumer` actuel ou à tous.
+
+
+
+
+## Le `consumer`
+
