@@ -190,3 +190,74 @@ Task BasicQosAsync(
 
 ## Le `consumer`
 
+```cs
+var consumer = new AsyncEventingBasicConsumer(channel);
+```
+
+```cs
+consumer.ReceivedAsync += async (sender, ea) => { ... };
+```
+
+
+
+### Récupérer le `payload` du `message`
+
+```cs
+var body = ea.Body.ToArray();
+```
+
+
+
+### récupérer le `channel` dans la lambda
+
+```cs
+var innerChannel = ((AsyncEventingBasicConsumer)sender).Channel;
+```
+
+Évite l'utilisation de `channel` simultanement sur plusieurs `Thread` :
+
+> [!WARNING]
+>
+> Captured variable is disposed in the outer scope
+
+
+
+### S'abonner aux `messages` : `BasicConsumeAsync`
+
+```cs
+await channel.BasicConsumeAsync(
+    queue: "concurrency_queue",
+    autoAck: false,
+    consumer: consumer
+);
+```
+
+
+
+## Accusé de reception (`ACK`) : `BasicAckAsync`
+
+```cs
+Task BasicAckAsync(
+    ulong deliveryTag,
+    bool multiple,
+    CancellationToken cancellationToken = default
+);
+```
+
+`deliveryTag` : Identifiant unique du `message`
+
+`multiple` : Si `true` acquites aussi tous les messages précédents.
+
+> [!WARNING]
+>
+> `!` si plusieurs `consumers` , `multiple = true` entraine des `acks` involontaires `!`.
+
+```cs
+await Channel.BasicAckAsync(
+    deliveryTag: ea.DeliveryTag,
+    multiple: false
+);
+```
+
+
+
