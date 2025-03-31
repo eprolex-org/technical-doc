@@ -77,19 +77,34 @@ app.MapGet("/hukar-login", async ([FromQuery] string returnUrl, HttpContext ctx)
 > System.InvalidOperationException: SignInAsync when principal.Identity.IsAuthenticated is false is not allowed when AuthenticationOptions.RequireAuthenticatedSignIn is true.
 > ```
 >
-> 
 
 
 
+## Fonctionnement
 
+<img src="assets/sequence-diagram-login-cookie.png" alt="sequence-diagram-login-cookie" />
 
+Le navigateur réclame une `resource` à une `api`, celle-ci le redirige (`302`) vers `/login`.
 
+Puis `/login` retourne un cookie dans son `Response Header` :
 
+<img src="assets/cookie-in-response-header.png" alt="cookie-in-response-header" />
 
+On observe la redirection avec `Location: /resource` et le `cookie` dans `Set-Cookie`.
 
+Finalement le navigateur ré-exécute la requête vers `/Resource` mais cette fois il possède le `cookie` dans son `Request Header` :
 
+<img src="assets/request-cookie-header-tyb.png" alt="request-cookie-header-tyb" />
 
+C'est possible car le navigateur stocke le `cookie` :
 
+<img src="assets/cookie-stockage-browser-akt.png" alt="cookie-stockage-browser-akt" />
+
+On peut donc observer les trois requête dans le navigateur :
+
+<img src="assets/three-request-story-plq.png" alt="three-request-story-plq" />
+
+> `Scalar` étant une page web effectuant les requête, comme `Postman` mais depuis le `navigateur`.
 
 
 
