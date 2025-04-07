@@ -1,0 +1,58 @@
+# 02 Template avec `Auth` intégré
+
+## Le `router`
+
+```react
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+            <NotAuthorized>
+                <RedirectToLogin/>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+    </Found>
+</Router>
+```
+
+On a le composant `AuthorizeRouteView` qui fonctionne avec le système d'authentification et d'autorisation. Si un composant n'est pas autorisé, il appelle le composant `RedirectToLogin`
+
+```react
+@code {
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
+    }
+
+}
+```
+
+Ce composant redirige vers l'`url` `account/login` (qui est une page `Blazor`).
+
+
+
+## Page sous `authorization`
+
+Le template a un exemple de page protégée par l'`authorization`, c'est la page `Auth.razor` :
+
+```ruby
+@page "/auth"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<PageTitle>Auth</PageTitle>
+
+<h1>You are authenticated</h1>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!
+</AuthorizeView>
+```
+
+On observe l'attribut `@attribute [Authorize]` qui protège la page.
+
+
+
