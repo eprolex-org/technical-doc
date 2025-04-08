@@ -14,6 +14,8 @@ On voit l'icône dans la barre d'outils en haut.
 
 ## Installer le conteneur `mssql`
 
+https://learn.microsoft.com/fr-fr/sql/linux/quickstart-install-connect-docker?view=sql-server-linux-ver16&preserve-view=true&tabs=cli&pivots=cs1-bash#pullandrun2022
+
 ```bash
 sudo docker pull mcr.microsoft.com/mssql/server:2022-latest
 ```
