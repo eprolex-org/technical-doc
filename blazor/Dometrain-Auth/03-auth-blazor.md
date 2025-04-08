@@ -1,4 +1,4 @@
-01 `Authorization` dans `Blazor`
+# 03 `Authorization` dans `Blazor`
 
 ## Les `Claims`
 
