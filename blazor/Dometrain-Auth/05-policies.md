@@ -143,3 +143,119 @@ else
 Ou bien si la personne peux y accéder :
 
 <img src="assets/authorization-succede-uuiiffgdtheyusj.png" alt="authorization-succede-uuiiffgdtheyusj" />
+
+
+
+## Créer un `Requirement` basé sur une `resource`
+
+```cs
+public record MyItem(string Name, string Description);
+```
+
+`ItemRequerement.cs`
+
+```ruby
+public class ItemRequirement : IAuthorizationRequirement { }
+
+public class ItemRequirementHandler : AuthorizationHandler<ItemRequirement, MyItem>
+{
+    private readonly IEnumerable<string> itemsForBoulangerie = ["ingredient", "ustensile", "cuisson"];
+    
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ItemRequirement requirement, MyItem resource)
+    {
+        var isAuthenticated = context.User.Identity is not null && context.User.Identity.IsAuthenticated;
+        var hasCorrectRole = context.User.HasClaim(c => c.Value == "Boulanger");
+        var itemAllowed = itemsForBoulangerie.Contains(resource.Name);
+        
+        if (isAuthenticated && hasCorrectRole && itemAllowed)
+        {
+            context.Succeed(requirement);
+        }
+
+        return Task.CompletedTask;
+    }
+}
+```
+
+
+
+### Enregistrement du `requirement`
+
+`Program.cs`
+
+```ruby
+builder.Services.AddAuthorization(options =>
+{
+   options.AddPolicy("ItemAllowed", policy =>
+    {
+        policy.AddRequirements(new ItemRequirement());
+    });
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, ItemRequirementHandler>();
+```
+
+>Il n'y a aucun conflit à proposer plusieurs implémentation pour `IAuthorizationHandler` :
+>
+>```ruby
+>builder.Services.AddSingleton<IAuthorizationHandler, PassSupervisorRequirementHandler>();
+>builder.Services.AddSingleton<IAuthorizationHandler, ItemRequirementHandler>();
+>```
+>
+>
+
+
+
+### Utilisation dans un `component`
+
+```ruby
+@page "/Item"
+
+@inject AuthenticationStateProvider StateProvider
+@inject IAuthorizationService AuthService
+
+
+<h3>Item</h3>
+
+<p>@itemOne</p>
+@if (resultOne is not null && resultOne.Succeeded)
+{
+    <p>Authorized</p>
+}
+else
+{
+    <p>Not authorized</p>
+}
+
+<p>@itemTwo</p>
+@if (resultTwo is not null && resultTwo.Succeeded)
+{
+    <p>Authorized</p>
+}
+else
+{
+    <p>Not authorized</p>
+}
+
+
+@code {
+    MyItem itemOne = new ("ustensile", "fourchette");
+    MyItem itemTwo = new ("mobilier", "chaise");
+
+    AuthorizationResult? resultOne;
+    AuthorizationResult? resultTwo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await StateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+
+        resultOne = await AuthService.AuthorizeAsync(user, itemOne, "ItemAllowed");
+        resultTwo = await AuthService.AuthorizeAsync(user, itemTwo, "ItemAllowed");
+    }
+}
+```
+
+<img src="assets/auth-servicee-with-resource.png" alt="auth-servicee-with-resource" />
+
+Comme `ustensile` fait partie des `items` autorisés `resultOne.Successed` est égal à `true`.
