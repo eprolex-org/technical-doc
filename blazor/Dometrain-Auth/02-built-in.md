@@ -46,7 +46,7 @@ ou d'appuyer sur le bouton `Apply Migration`.
 
 ## Confirmation par `email`
 
-```cs
+```ruby
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
@@ -76,12 +76,15 @@ C'est plus facile pour les test.
 
 On a le composant `AuthorizeRouteView` qui fonctionne avec le système d'authentification et d'autorisation. Si un composant n'est pas autorisé, il appelle le composant `RedirectToLogin`
 
-```react
+```CS
 @code {
 
     protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
+        NavigationManager.NavigateTo(
+            $"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}",
+			forceLoad: true
+		);
     }
 
 }
