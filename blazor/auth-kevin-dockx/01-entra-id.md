@@ -22,13 +22,9 @@ On obtient les infos de l'inscription (dont le `Client Id`) :
 
 
 
-## Récupérer et générer les `credentials` de L'application
 
-Client Id : e9103ed1-540d-4d4e-b23e-0fc63c9514a6
 
-Client Secret : ~5T8Q~B0~VumB~i8C5jtCBYEJY.LfHWijCYmsa42
-
-### Créer un `secret`
+## Créer un `secret`
 
 <img src="assets/create-secret-page-yytshgfdvbciou.png" alt="create-secret-page-yytshgfdvbciou" />
 

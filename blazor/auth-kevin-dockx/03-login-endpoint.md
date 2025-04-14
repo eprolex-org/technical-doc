@@ -7,7 +7,7 @@
 J'utilise toujours le pattern `method extension` pour organiser mes `endpoints`.
 
 ```cs
-app.MapGet("/login", ([FromQuery] string? returnUrl, HttpContext context) =>
+app.MapGet("/login", ([FromQuery] string? returnUrl) =>
 {
 	if (string.IsNullOrEmpty(returnUrl) 
         || !Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
@@ -20,6 +20,37 @@ app.MapGet("/login", ([FromQuery] string? returnUrl, HttpContext context) =>
         RedirectUri = returnUrl
     });
 }).AllowAnonymous();
+```
+
+ou en refactorant :
+
+```cs
+app.MapGet("/login", (string? returnUrl) =>
+{
+    returnUrl = ValidateReturnUrl(returnUrl);
+
+    var properties = new AuthenticationProperties { RedirectUri = returnUrl };
+
+    return TypedResults.Challenge(properties);
+});
+```
+
+```cs
+private static string ValidateReturnUrl(string? returnUrl)
+{
+    if (string.IsNullOrEmpty(returnUrl) || !Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
+    {
+        return returnUrl = "/";
+    }
+
+    return returnUrl;
+}
+
+// ou bien
+
+private static string ValidateReturnUrl(string? returnUrl) =>
+        (string.IsNullOrEmpty(returnUrl) || !Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
+            ? "/" : returnUrl;
 ```
 
 

@@ -54,3 +54,82 @@ builder.Services.AddAuthentication(options =>
 > | `SaveTokens = true;`                                         | Sauvegarde les tokens (`id_token`, `access_token`, `refresh_token`) dans le `AuthenticationProperties` → utile si tu veux les réutiliser plus tard. |
 >
 
+
+
+## `Path`, `PathString` et `Uri` 
+
+(ChatGPT)
+
+### 🔹 `System.IO.Path`
+
+- **But** : Travailler avec **les chemins de fichiers système** (disques, dossiers, fichiers).
+- **Exemples** :
+  - `Path.Combine("C:\\Users", "MonFichier.txt")`
+  - `Path.GetExtension("fichier.txt") → ".txt"`
+- **Utilisation typique** : Lecture/écriture de fichiers, manipulation de chemins sur le disque.
+- 📁 **Concerne le système de fichiers local**.
+
+
+
+### 🔹 `Microsoft.AspNetCore.Http.PathString`
+
+- **But** : Représenter et manipuler **les segments d’URL dans le contexte d’une requête HTTP** (surtout dans ASP.NET Core).
+- **Exemples** :
+  - `var pathString = new PathString("/api/products")`
+  - `pathString.Add("/details") -> "/api/products/details"`
+  - Utilisé dans des middlewares, pour router des requêtes, etc.
+- **Avantages** :
+  - Encapsule les chemins d’URL (avec gestion d’encodage, comparaison sécurisée, etc.)
+- 🌐 **Concerne le chemin de la requête HTTP**, sans protocole ni domaine.
+
+
+
+### 🔹 `System.Uri`
+
+- **But** : Représenter **une URL complète** (ou URI générique, comme une base de données, FTP, etc.)
+
+- **Exemples** :
+
+  - `new Uri("https://example.com/api/products?id=1")`
+  - `uri.Host → "example.com"`
+  - `uri.AbsolutePath → "/api/products"`
+
+- **Fonctionnalités** :
+
+  - Analyse complète de l’URI (schéma, port, query string, fragment…)
+
+- 🌍 **Concerne des adresses complètes (web ou autre)**.
+
+  
+
+------
+
+### 🧠 En résumé
+
+| Classe       | Domaine         | Représente                          | Exemples d'usage                     |
+| ------------ | --------------- | ----------------------------------- | ------------------------------------ |
+| `Path`       | Fichiers locaux | Chemin de fichiers sur disque       | `C:\Dossier\Fichier.txt`             |
+| `PathString` | ASP.NET Core    | Partie *chemin* d’une URL HTTP      | `/api/products`                      |
+| `Uri`        | Global / Web    | URI complet (protocole, hôte, etc.) | `https://site.com/api/products?id=1` |
+
+
+
+## Utilisation de `appsettings.json`
+
+Le `middleware` d'authentification va chercher automatiquement ses valeurs dans `appsettings` :
+
+```json
+"Authentication": {
+    "Schemes": {
+      "EntraIDOpenIDConnect": {
+        "Authority": "https://login.microsoftonline.com/5c154a7e-0c13-4f92-8531-e3f4d8fbeae9/v2.0",
+        "ClientId": "3b2f51e7-ea7d-4a0f-931f-87e98e6b022e",
+        "ClientSecret": "Bwd8Q~N5ngKp-qZveD0Wgu5A8UmsGqb6WoyJBaUf",
+        "CallbackPath": "/signin-oidc",
+        "SignedOutCallbackPath": "/signout-callback-oidc",
+        "ResponseType": "code"
+      }
+    }
+  }
+```
+
