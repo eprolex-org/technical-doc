@@ -124,7 +124,7 @@ Le `middleware` d'authentification va chercher automatiquement ses valeurs dans 
       "EntraIDOpenIDConnect": {
         "Authority": "https://login.microsoftonline.com/5c154a7e-0c13-4f92-8531-e3f4d8fbeae9/v2.0",
         "ClientId": "3b2f51e7-ea7d-4a0f-931f-87e98e6b022e",
-        "ClientSecret": "Bwd8Q~N5ngKp-qZveD0Wgu5A8UmsGqb6WoyJBaUf",
+        "ClientSecret": "",
         "CallbackPath": "/signin-oidc",
         "SignedOutCallbackPath": "/signout-callback-oidc",
         "ResponseType": "code"
