@@ -4,7 +4,7 @@
 
 ## Création d'une `resource`
 
-Je créé un dossier `Resources` et deans j'ajoute un fichier `.resx` :
+Je créé un dossier `Resources` et dedans j'ajoute un fichier `.resx` :
 
 <img src="assets/resx-creation.png" alt="resx-creation" style="zoom:50%;" />
 
