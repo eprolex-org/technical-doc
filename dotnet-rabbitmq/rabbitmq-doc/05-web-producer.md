@@ -3,7 +3,7 @@
 ## `ProducerFactory`
 
 ```cs
-public class ProducerFactory
+public static class ProducerFactory
 {
     public static async Task<Producer> CreateProducerAsync() {
         
@@ -59,7 +59,9 @@ public class Producer(IConnection connection, IChannel channel) : IAsyncDisposab
 }
 ```
 
-
+> La `connection` et le `channel` sont passés à la classe `Producer` et c'est celle-ci qui les `dispose` proprement.
+>
+> La classe `ProducerFactory` peut donc être `static`.
 
 ## `Program.cs`
 
