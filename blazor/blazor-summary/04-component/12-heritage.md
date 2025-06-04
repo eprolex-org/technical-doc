@@ -1,4 +1,4 @@
-# 12 Hériter d'un `Component`
+# 12 Hériter d'un `Component` : `@inherits`
 
 ```html
 @inherits MyBaseComponent

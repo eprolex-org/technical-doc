@@ -42,4 +42,3 @@ devient :
     <link href="@Assets["_content/MudBlazor/MudBlazor.min.css"]" rel="stylesheet"/>
 ```
 
-
