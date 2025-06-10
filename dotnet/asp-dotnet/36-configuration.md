@@ -211,7 +211,7 @@ Key: chala la lala
 
 On peut créer des `secrets` et les récupérer via la configuration.
 
-On. crée un `Secret ID`: `user-secrets init`
+On crée un `Secret ID`: `user-secrets init`
 
 ```bash
 dotnet user-secrets init
