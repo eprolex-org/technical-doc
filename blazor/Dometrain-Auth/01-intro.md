@@ -4,7 +4,7 @@
 
 qui êtes vous ? Prouvez qui vous êtes.
 
-C'eest la phase de `login`.
+C'est la phase de `login`.
 
 ## `Authorization`  : then
 
