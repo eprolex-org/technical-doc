@@ -1,27 +1,79 @@
 # 07 Gestion des `line separator` : `CRLF` et `LF`
 
-Il faut créer un fichier à la racine du dépôt : 
 
-`.gitattributes`
 
+## ✅ Gestion des fins de ligne (LF) dans le projet
+
+Pour garantir des fins de ligne cohérentes (`LF`) sur toutes les plateformes (Windows, macOS, Linux) et éviter les faux changements dans Git :
+
+---
+
+### 1. `.gitattributes` (à placer à la racine du dépôt)
+
+```gitattributes
+* text=auto
+
+# Fichiers texte forcés en LF
+*.cs       text eol=lf
+*.csproj   text eol=lf
+*.sln      text eol=lf
+*.json     text eol=lf
+*.xml      text eol=lf
+*.razor    text eol=lf
+*.config   text eol=lf
+
+# Fichiers binaires
+*.png      binary
+*.dll      binary
 ```
-* text eol=crlf
+
+---
+
+### 2. `.editorconfig` minimaliste (à placer à la racine)
+
+```ini
+root = true
+
+[*]
+end_of_line = lf
 ```
 
-Puis appliquer la configuration
+---
+
+### 3. Configuration Git locale (une seule fois par développeur)
+
+#### Pour macOS / Linux :
 
 ```bash
-git add --renormalize .
-git commit -m "Normalize line endings to CRLF"
+git config --global core.autocrlf input
 ```
 
-
-
-## Empêcher `git` de réécrire les fins de ligne
+#### Pour Windows :
 
 ```bash
-git config --global core.autocrlf false
+git config --global core.autocrlf true
 ```
+
+---
+
+### 4. (Optionnel) Normalisation des fichiers existants
+
+À exécuter une seule fois après ajout du `.gitattributes` :
+
+```bash
+git rm --cached -r .
+git reset --hard
+git add .
+git commit -m "Normalisation des fins de ligne"
+```
+
+---
+
+✅ **Résultat :**  
+
+- Fins de ligne normalisées (`LF`) dans Git.  
+- Comportement cohérent sur tous les systèmes et éditeurs.  
+- Plus de faux changements dus aux fins de ligne dans `git diff`, `Rider`, `VS`, `Sourcetree` ou `Azure DevOps`.
 
 ### Comparaison avec d'autres valeurs
 
