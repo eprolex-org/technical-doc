@@ -1,5 +1,5 @@
 
-## Attribut `[Authorize]`
+## 03. Attribut `[Authorize]`
 
 L’attribut `[Authorize]` est disponible dans les composants Razor :
 

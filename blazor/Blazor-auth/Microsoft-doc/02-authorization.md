@@ -1,5 +1,4 @@
-
-# Autorisation
+# 02.  Autorisation
 
 Après l’authentification d’un utilisateur, des règles d’autorisation sont appliquées pour contrôler ce que l’utilisateur peut faire.
 

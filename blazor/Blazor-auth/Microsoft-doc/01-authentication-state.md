@@ -1,8 +1,4 @@
-Voici la traduction ChatGPT
-
----
-
-# Service `AuthenticationStateProvider`
+# 01. Service `AuthenticationStateProvider`
 
 `AuthenticationStateProvider` est le service sous-jacent utilisé par le composant `AuthorizeView` et les services d’authentification en cascade pour obtenir l’état d’authentification d’un utilisateur.
 
