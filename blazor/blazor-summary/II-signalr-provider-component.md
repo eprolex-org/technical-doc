@@ -61,7 +61,7 @@ public async ValueTask DisposeAsync()
 
 > ### ! Important !
 >
-> Ne pas utiliser l'`options` : `SkipNegociation = true`, car on perd l'accès à `connectionId` qui apparemment est renvoyé lors de cette phase de `négocition`.
+> Ne pas utiliser l'`options` : `SkipNegociation = true`, car on perd l'accès à `connectionId` qui apparemment est renvoyé lors de cette phase de `négociation`.
 
 Bien mettre `Connection = null` car sinon on ne peut redémarrer la `connection` sans obtenir cette erreur :
 
