@@ -101,10 +101,6 @@ On peut récupérer notre `User` grâce à ce service :
 
 @code {
 
-    [CascadingParameter] public HttpContext? HttpContext { get; set; }
-
-
-
     async Task GetAuthState()
     {
         var authState = await Provider.GetAuthenticationStateAsync();
@@ -114,7 +110,6 @@ On peut récupérer notre `User` grâce à ce service :
 
         Console.WriteLine($"user is authenticated: {isAuthenticated}");
     }
-
 }
 ```
 
@@ -418,7 +413,7 @@ Pour les autorisations basées sur les `claims`, c'est un cas particulier des au
 
 
 
-## Atribut `[Authorize]`
+## Attribut `[Authorize]`
 
 ```cs
 @page "/Secret"
