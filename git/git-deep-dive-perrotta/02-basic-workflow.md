@@ -16,7 +16,13 @@
 
 <img src="assets/git-status-yyeeahyytrzyyhgf.png" alt="git-status-yyeeahyytrzyyhgf" />
 
-### `git status` nous conseille d'effectuer un `git add`, un `git restore` ou bien un `git commit -a`.
+### `git status` nous conseille d'effectuer : 
+
+### un `git add`, 
+
+### un `git restore` ou bien 
+
+### un `git commit -a`.
 
 
 
@@ -50,24 +56,21 @@ On reviens à un `clean status` et `git diff` ou bien `git diff --cached` ne mon
 
 
 
-## Déplacer les données vers la gauche
 
-### la commande `switch`
 
-Elle permet de passer d'une `branch` à l'autre.
 
-> `switch ` ne permet de passer que d'une `branch` à une autre, alors que `checkout` permet de se rebdre sur n'importe quel `commit`.
 
-Elle fait deux choses :
 
-1. Dans le `Repository`, elle déplace la réferece  `HEAD`, ce qui change le `current commit`.
-2. Elle copie les données dans `Working Area` et `Index`.
 
-<img src="assets/git-switch-command-gdfretbvcgdtrefcvdghytrefdcsx.png" alt="git-switch-command-gdfretbvcgdtrefcvdghytrefdcsx" />
 
-Le `HEAD` détermine le `current commit`.
 
-<img src="assets/head-file-text-pmloiakjshvaaqszeartx.png" alt="head-file-text-pmloiakjshvaaqszeartx" />
+
+
+
+
+
+
+
 
 
 
