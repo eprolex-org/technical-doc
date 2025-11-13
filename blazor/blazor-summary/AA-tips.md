@@ -205,3 +205,24 @@ Et on l'utilise dans un `composant` :
 ```
 
 On peut ainsi avoir des valeurs seulement pour le `DEBUG`.
+
+
+
+## Rafraîchir le cache DNS du navigateur (Chrome)
+
+Il faut aller à l'adresse `chrome://net-internals/#dns` :
+
+![dns-flush-chrome](assets/dns-flush-chrome.png)
+
+On peut aussi faire un `nslookup` pour vérifier qu'une url pointe bien vers un serveur donné :
+
+```bash
+C:\Users\kms>nslookup eprolex-acc
+Serveur :   DC-B.raadvst-consetat.be
+Address:  172.16.0.211
+
+Nom :    W2K22-czam-03.raadvst-consetat.be
+Address:  172.16.50.88
+Aliases:  eprolex-acc.raadvst-consetat.be
+```
+
