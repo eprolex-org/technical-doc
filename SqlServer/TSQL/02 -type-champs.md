@@ -215,3 +215,51 @@ Ce type prend trois valeurs `0`, `1` ou `null`.
 > | 0–2           | 6 octets |
 > | 3–4           | 7 octets |
 > | 5             |          |
+
+## Champ date : `DATETIME2`
+
+```sql
+[CreationLe] DATETIME2(0) DEFAULT SYSDATETIME(),
+```
+
+`DATETIME2(n)` : `n` est une valeur comprise entre `0` et `7` qui correspond à la précision après la seconde.
+
+> Dans `DATETIME2(n)` (ou `TIME(n)`), le **n** correspond à la **précision des fractions de seconde**, c’est-à-dire **le nombre de chiffres décimaux pour les millisecondes**.
+>
+> # Valeur de `n` = précision des fractions de secondes
+>
+> | n     | Précision            | Exemple de valeur possible    |
+> | ----- | -------------------- | ----------------------------- |
+> | **0** | secondes entières    | `2025-01-15 10:23:45`         |
+> | **1** | 0.1 seconde (100 ms) | `2025-01-15 10:23:45.1`       |
+> | **2** | 0.01 seconde (10 ms) | `2025-01-15 10:23:45.12`      |
+> | **3** | 1 milliseconde       | `2025-01-15 10:23:45.123`     |
+> | **4** | 0.1 ms               | `2025-01-15 10:23:45.1234`    |
+> | **5** | 0.01 ms              | `2025-01-15 10:23:45.12345`   |
+> | **6** | 1 µs (microseconde)  | `2025-01-15 10:23:45.123456`  |
+> | **7** | ~100 ns              | `2025-01-15 10:23:45.1234567` |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
