@@ -172,6 +172,44 @@ Ce type prend trois valeurs `0`, `1` ou `null`.
 
 ## `Email` : `VARCHAR(254)`
 
+> Pour un champ d’e-mail, la **bonne pratique en SQL Server** est très claire :
+>
+> #### ✅ **Utiliser `VARCHAR(254)` et non `NVARCHAR(254)`**
+>
+> 
+>
+> ## 🧠 Pourquoi `VARCHAR` plutôt que `NVARCHAR` ?
+>
+> ### ✔ **Les e-mails sont limités à ASCII / UTF-8 non élargi pour la partie domaine**
+>
+> La norme (RFC 5321/5322 + spécifications DNS) impose que :
+>
+> - La **partie domaine** (après `@`) **ne peut pas contenir de caractères Unicode** (sauf via IDN/Punycode).
+> - La **partie locale** (avant `@`) *peut* techniquement être UTF-8, mais dans 99,9% des cas, les systèmes l’interdisent ou la normalisent.
+>
+> Dans les bases de données relationnelles, les e-mails sont presque toujours traités comme **ASCII/UTF-8 restreint**, donc `VARCHAR` est suffisant.
+>
+> 
+>
+> ## ✔ **Performance & stockage : VARCHAR est plus léger**
+>
+> `NVARCHAR` stocke les données en **UTF-16**, donc :
+>
+> - 2 octets par caractère
+> - +2 octets d’overhead
+>
+> Alors que `VARCHAR` = 1 octet par caractère.
+>
+> Donc un e-mail en `nvarchar(254)` :
+>
+> - occupe **2× la place** d’un `varchar(254)`
+> - utilise plus d’I/O
+> - ralentit les index (cluster/noncluster)
+
+
+
+
+
 ## Les dates : `datetime2(0)`
 
 > `datetime2(0)` signifie que tu utilises le type **`datetime2` avec une précision de 0 décimales pour les fractions de seconde**.

@@ -29,6 +29,16 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Huk@r99_Dba" \
 
 <img src="assets/connection-mssql-azure-data-studio.png" alt="connection-mssql-azure-data-studio" />
 
+![connection_sql_windows_localhost](assets/connection_sql_windows_localhost.png)
+
+#### Sur `Windows` , le `localhost` s'écrit `.,1433`
+
+
+
+
+
+
+
 
 
 
