@@ -109,6 +109,37 @@ DENY CONTROL ON SCHEMA::dbo TO AppUser;
 
 
 
+## Utilisateur basé sur les rôles prédéfinis
+
+```sql
+------------------------------------------------------------
+-- 1. Créer le LOGIN (serveur) utilisé par la connection string
+------------------------------------------------------------
+CREATE LOGIN eprolex
+    WITH PASSWORD = 'eprolex123.';   -- À changer bien sûr
+
+
+------------------------------------------------------------
+-- 2. Créer l’USER (base) lié au LOGIN
+------------------------------------------------------------
+USE EProlex;
+GO
+
+CREATE USER eprolex_user FOR LOGIN eprolex;
+GO
+
+
+------------------------------------------------------------
+-- 3. Donner des rôles et EXECUTE (pour les fonctions et procédures stockées)
+------------------------------------------------------------
+
+ALTER ROLE db_datareader ADD MEMBER eprolex_user;  -- SELECT partout dans la DB
+ALTER ROLE db_datawriter ADD MEMBER eprolex_user;  -- INSERT/UPDATE/DELETE partout
+GRANT EXECUTE ON SCHEMA::dbo TO eprolex_user;      -- exécuter les proc/fonctions du schéma dbo
+```
+
+
+
 
 
 
