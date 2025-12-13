@@ -67,7 +67,7 @@ De plus à chaque nouvelle application on doit réinventer la roue en implément
 
 <img src="assets/implementation-token-hell.png" alt="implementation-token-hell" style="zoom:50%;" />
 
-La complexité su système ne peut que générer des erreurs dans l'implémentation.
+La complexité du système ne peut que générer des erreurs dans l'implémentation.
 
 Même si l'implémentation est sans erreurs, il reste la maintenance compliquée, car régulièrement de nouvelles failles sont découvertes.
 
@@ -124,7 +124,7 @@ On peut vouloir ajouter un deuxième et un troisème facteur d'authentification 
 
 
 
-## `OAuth2` : `Authorization`
+## `OAuth2` : `Open Authorization 2`
 
 `OAuth2` est un protocole ouvert (`Open Protocol`) pour permettre une autorisation sécurisé dans une méthode simple et standard pour le web, les mobiles et les applications desktop.
 
@@ -132,11 +132,11 @@ Une `application cliente` peut demander un `access token` pour accéder à une `
 
 `OAuth2` définie comment une `application cliente` peut en toute sécurité obtenir une `autorisation`.
 
-Les `endpoint locaux` (`homegrown endpoint`) sont remplacés par des `endpoints` suivant le standard `OAuth2`.
+Les `endpoint "maison"` (`homegrown endpoint`) sont remplacés par des `endpoints` suivant le standard `OAuth2`.
 
-Ce standard définie comment utiliser cet `endpoint` pour différents types d'`applications clientes`.
+Ce standard définie comment utiliser ces `endpoints` pour différents types d'`applications clientes`.
 
-`Duende.IdentityServer` ou `Azure Active Directory` implémente le standard `OAuth`.
+`Duende.IdentityServer` ou `Azure Active Directory` (`Azure Entra`) implémente le standard `OAuth`.
 
 Cet `access token` est seulement prévu pour fonctionner avec une `API`.
 
