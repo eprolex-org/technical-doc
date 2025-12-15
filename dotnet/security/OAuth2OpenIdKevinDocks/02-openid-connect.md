@@ -10,8 +10,8 @@ On est concentré sur l'`identity` avec le `identity token`, il n'y a pas pour l
 - Elle le redirige vers un `Identity Provider` : `IDP` pour savoir qui il est
 - Celui-ci (`Microsoft`, `Google`) propose une interface de connection à l'`utlisateur`, par exemple un formulaire `username`/`password` pour qu'il prouve qui il est
 - Si la personne est `autentifiée` par le `IDP` celui-ci renvoie un `identity token` à l'`application cliente`, ce `token` contient l'`identité vérifié` de l'`utilisateur`
-- Dans une application `ASP.NET` cet `identity token` va servir à créer un `ClaimsIdentity`
-- l'`application cliente` gère l'autentification en enregistrant un `cookie` encrypté d'après le `ClaimsIdentity`
+- Dans une application `ASP.NET` cet `identity token` va servir à créer un `Claims Identity`
+- l'`application cliente` gère l'autentification en enregistrant un `cookie` encrypté d'après le `Claims Identity`
 
 <img src="assets/how-openid-connect-works.png" alt="how-openid-connect-works" style="zoom:50%;" />
 
@@ -42,6 +42,8 @@ Il vit sur le périphérique de l'utilisateur.
 Ces `applications clientes` ne peuvent pas être authentifié en toute sécurité.
 
 Ce sont les application `javascript` ou `WebAssembly` (et les applications `Mobile`).
+
+Certain périphérique mobile peuvent encrypter des secret au niveau matériel. Ils sont quand même considéré comme `Public Client`.
 
 
 
@@ -119,7 +121,7 @@ Dans ce `Flow` les `Tokens` sont retournés depuis le `Token Endpoint`.
 
 Si le `Flow` est `Authenticated` (`Confidential Clients`) il autorise un accès long (`long-life access`) grâce au `refresh token`.
 
-Pour le `public clients`, qui ne peut pas stocké des `Credentials` de manière sécurisé, il n'est pas intéressant d'envoyer une `Authoticated Request`.
+Pour le `public clients`, qui ne peut pas stocké des `Credentials` de manière sécurisé, il n'est pas intéressant d'envoyer une `Authenticated Request`.
 
 Du coup le `Long-Live Access` est restreint, un `refresh token` est possible, mais seulement une seule fois.
 
@@ -140,3 +142,5 @@ Du coup le `Long-Live Access` est restreint, un `refresh token` est possible, ma
 Rien n'empêche techniquement de choisir tel ou tel `Flow`, mais choisir le mauvais ouvre un trou de sécurité.
 
 > Le truc avec la sécurité, c'est que plein d'approche vont fonctionner, mais la plupart d'entre elle ne sont pas de bonne idée.
+>
+> Ce qui est une bonne idée change tout le temps.
