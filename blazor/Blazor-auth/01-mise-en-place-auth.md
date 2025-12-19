@@ -47,7 +47,9 @@ Pour protéger une page on utilise un `attribut` d'authorisation :
 <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
 ```
 
-Si on va sur la page on est redirigé vers `/Account/Login` :
+Si on va sur la page, `Not Authorized` s'affiche si on vient d'une page non protégée.
+
+Si on recharge la page, on est redirigé vers `/Account/Login` :
 
 <img src="assets/redirect-to-login-page-rrssjhgvyjhuiknzea.png" alt="redirect-to-login-page-rrssjhgvyjhuiknzea" />
 

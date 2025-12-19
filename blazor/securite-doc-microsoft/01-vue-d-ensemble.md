@@ -135,25 +135,49 @@ Au lieu d'utiliser `AuthenticationStateProvider`, on le remplase par `Task<Authe
 <button class="btn btn-primary" @onclick="GetAuthState">Get Auth State</button>
 
 @code {
-
-    [CascadingParameter] Task<AuthenticationState>? AuthState { get; set; }
+    
+    [CascadingParameter] private Task<AuthenticationState>? authenticationState { get; set; }
 
     async Task GetAuthState()
     {
-        var authState = await AuthState;
+       if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
 
-        var user = authState.User;
-
-        var isAuthenticated = user.Identity.IsAuthenticated;
-
-        Console.WriteLine($"user is authenticated: {isAuthenticated}");
+            if (user?.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                authMessage = $"{user.Identity.Name} is authenticated.";
+            }
+        }
     }
-
 }
 ```
 
 ```
 user is authenticated: False
+```
+
+
+
+## Récupérer proprement un `claim` : `FindFirstValue`
+
+### 🥇 **Best practice :**
+
+```csharp
+var surname = user.FindFirstValue(ClaimTypes.Surname);
+```
+
+### 🥈 Alternative acceptable :
+
+```csharp
+var surname = user.FindFirst(ClaimTypes.Surname)?.Value;
+```
+
+### 🥉 Correct mais moins élégant :
+
+```csharp
+var surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
 ```
 
 
