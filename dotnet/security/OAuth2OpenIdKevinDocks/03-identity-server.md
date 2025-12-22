@@ -165,6 +165,8 @@ https://localhost:5001/.well-known/openid-configuration
 
 ## Ajouter l'interface utilisateur
 
+Dans le projet taper la commande suivante :
+
 ```bash
 dotnet new isui
 
@@ -173,17 +175,43 @@ Le modèle « Duende IdentityServer Quickstart UI (UI assets only) » a bien �
 
 <img src="assets/page-ui-web-assets-identity-trefdgysyuajhsgfertsgvbnw.png" alt="page-ui-web-assets-identity-trefdgysyuajhsgfertsgvbnw" />
 
-Un dossier `wwwroot` et toutes les pages utilies sont créés.
+Un dossier `wwwroot` et toutes les pages utiles sont créés.
 
 Ce sont des `Razor Pages`, on doit permettre à l'application de les utiliser.
 
 Il suffit de dé-commenter les lignes relatives aux `Razor Pages` (tout se trouve dans `HostingExtension.cs`).
 
+```csharp
+public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
+{
+    // uncomment if you want to add a UI
+    builder.Services.AddRazorPages();
+
+    // ...
+
+public static WebApplication ConfigurePipeline(this WebApplication app)
+{
+    // ...
+
+    // uncomment if you want to add a UI
+    app.UseStaticFiles();
+    app.UseRouting();
+
+    app.UseIdentityServer();
+
+    // uncomment if you want to add a UI
+    app.UseAuthorization();
+    app.MapRazorPages().RequireAuthorization();
+
+```
+
+
+
 <img src="assets/identity-server-ui-installed-hhgtymlopkjjjjnbgfstey.png" alt="identity-server-ui-installed-hhgtymlopkjjjjnbgfstey" />
 
 
 
-## Ajouter des `Utilisateurs`
+## Ajouter des `Utilisateurs`  de test
 
 Lorsqu'on a ajouter l'`UI`, un fichier  `TestUsers` a été créé :
 
@@ -278,7 +306,7 @@ public static class TestUsers
 }
 ```
 
-Il y a une différence entre les ressources ayant beoin d'une `Identity` et les ressources devant juste accéder à une `API`.
+Il y a une différence entre les ressources ayant besoin d'une `Identity` et les ressources devant juste accéder à une `API`.
 
 On veut ajouter le support pour le `Profile Scope`. C'est dans le fichier `Config.cs` :
 
@@ -297,7 +325,7 @@ public static class Config
 }
 ```
 
-
+Par défaut seul le scope `openid` est obligatoire pour `OIDC`, il contient uniquement l'id de l'utilisateur.
 
 ### Différents `Scope`
 
@@ -330,6 +358,42 @@ public static WebApplication ConfigureServices(this WebApplicationBuilder builde
 ```
 
 
+
+## Discovery document
+
+<img src="assets/discovery-document-ggsfdqssaaazqerzcxwgshyuzi.png" alt="discovery-document-ggsfdqssaaazqerzcxwgshyuzi" />
+
+```url
+https://localhost:5001/.well-known/openid-configuration
+```
+
+```json
+  "scopes_supported": [
+    "openid",
+    "profile",
+    "offline_access"
+  ],
+  "claims_supported": [
+    "sub", // <- openid scope
+      // profile scope ↓
+    "name",
+    "family_name",
+    "given_name",
+    "middle_name",
+    "nickname",
+    "preferred_username",
+    "profile",
+    "picture",
+    "website",
+    "gender",
+    "birthdate",
+    "zoneinfo",
+    "locale",
+    "updated_at"
+  ],
+```
+
+On voit qu'un `scope` a été ajouté (`profile`) ainsi que les `claims` associées.
 
 
 
