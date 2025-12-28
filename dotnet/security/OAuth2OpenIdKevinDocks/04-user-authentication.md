@@ -189,6 +189,31 @@ builder.Services.AddAuthentication(cfg =>
 
 `options.SaveTokens` : permet de réutiliser les `token` après (le passer à l'`API` par exemple) si mis à `true`.
 
+## Les propriétés “default” importantes :
+
+- **`DefaultScheme`**
+   👉 *fallback* global : si un default spécifique n’est pas défini (authenticate/challenge/…), on retombe sur `DefaultScheme`.
+
+- **`DefaultAuthenticateScheme`**
+   👉 utilisée quand le framework fait `AuthenticateAsync()` sans schéma explicite (ex : `UseAuthentication()` et/ou l’auth implicite liée à l’authorization). C’est ce qui **remplit `HttpContext.User`** (si succès).
+
+- **`DefaultChallengeScheme`**
+   👉 utilisée quand on fait `ChallengeAsync()` (typiquement : `[Authorize]` sur une ressource et user non authentifié) :
+
+  - pour un site : souvent **redirect vers login / OIDC**
+  - pour une API : souvent **401 + WWW-Authenticate** (JWT).
+
+- **`DefaultForbidScheme`**
+   👉 utilisée quand on fait `ForbidAsync()` (typiquement : user authentifié **mais** pas autorisé) → 403 ou redirect “access denied” selon le handler.
+
+- **`DefaultSignInScheme`**
+   👉 utilisée quand on fait `SignInAsync()` sans schéma explicite. Très important avec les handlers “remote” (OIDC/OAuth) : ils s’authentifient “auprès d’un tiers”, puis **demandent à un schéma local** (souvent Cookie) de **persister la session**. 
+
+- **`DefaultSignOutScheme`**
+   👉 utilisée par `SignOutAsync()` sans schéma explicite (cookie signout local, et/ou signout OIDC si tu le déclenches).
+
+  
+
 > ## Attention !
 >
 > Il faut être en `https` et avoir les certificats `trusté` par le système  pour que cela fonctionne :
@@ -203,7 +228,223 @@ builder.Services.AddAuthentication(cfg =>
 
 
 
+## Sécuriser une page
 
+```cs
+@attribute [Authorize]
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+```
+
+L'attribut `[Authorize]` va déclencher `ChallengeAsync`, comme `DefaultChallengeScheme` pointe vers le handler d'`OIDC`, on va être redirigé ves le serveur `Identity Provider` (`IDP`) :
+
+<img src="assets/idp-login-hhsfrteytaaacxwsqdezrfssknbvfgfgfgyuijdhdgts.png" alt="idp-login-hhsfrteytaaacxwsqdezrfssknbvfgfgfgyuijdhdgts" style="zoom:25%;" />
+
+S'il n'y a pas de `user` authentifié (persisté grâce au `Cookie`), on sera redirigé vers la page de `login` de `Duende IdentitySErver`.
+
+
+
+## Écran de consentement
+
+On a joute à la config de l'`IDP` dans `Config.cs` :
+
+```cs
+public static IEnumerable<Client> Clients => [
+        new Client
+        {
+            ClientName = "Hukar Gallery",
+            ClientId = "hukargalleryclient",
+            AllowedGrantTypes = GrantTypes.Code,
+            RedirectUris =
+            {
+                "https://localhost:7227/signin-oidc"
+            },
+            AllowedScopes =
+            {
+                IdentityServerConstants.StandardScopes.OpenId,
+                IdentityServerConstants.StandardScopes.Profile,
+                // IdentityServerConstants.LocalApi.ScopeName
+            },
+            ClientSecrets =
+            {
+                new Secret("hukarsecret".Sha256())
+            },
+            RequireConsent = true
+        }
+    ];
+```
+
+<img src="assets/consent-screen-kkjhgsfcxeearztyxbgs.png" alt="consent-screen-kkjhgsfcxeearztyxbgs" style="zoom:33%;" />
+
+On peut alors cocher et décocher le `user profile`.
+
+
+
+## Middleware pour logger le `Token`
+
+```cs
+public class TokenLoggerMiddleware(RequestDelegate next, ILogger<TokenLoggerMiddleware> logger)
+{
+    private readonly RequestDelegate _next = next;
+    private readonly ILogger<TokenLoggerMiddleware> _logger = logger;
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var token = await context.GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+
+        var userClaims = new StringBuilder();
+
+        foreach (var claim in context.User.Claims)
+        {
+            userClaims.AppendLine($"{claim.Type} : {claim.Value}");
+        }
+        
+        _logger.LogInformation("token & claims : {Token} \n {userClaims}  \n", token, userClaims);
+
+        await _next(context);
+    }
+}
+```
+
+`context.GetTokenAsync("id_token")` récupère le `token`.
+
+`OpenIdConnectParameterNames.IdToken` contient la valeur `"id_token"`.
+
+On obtient :
+
+```bash
+info: HukarGallery.Middlewares.TokenLoggerMiddleware[0]
+      token & claims : eyJhbGciOiJSUzI1NiIsImtpZCI6IjRCRTkzRUI3QzU5MUFEQTUyRkQ0QTIzM0M4RURGMTY2IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwibmJmIjoxNzY2ODI1NjA4LCJpYXQiOjE3NjY4MjU2MDgsImV4cCI6MTc2NjgyNTkwOCwiYXVkIjoiaHVrYXJnYWxsZXJ5Y2xpZW50IiwiYW1yIjpbInB3ZCJdLCJub25jZSI6IjYzOTAyNDIyMzk1NTc0MjM0MC5aakF6T0RKaU4yVXROMkUwTXkwME5tUXdMV0ptWVRVdFlUQmhObUZpTURZNU5EZzBaVE13WVRVNU9Ua3RNMkpsT1MwMFpEWmhMV0poTkdZdE1UQXdNbUZrTm1NMlpEQTMiLCJhdF9oYXNoIjoiME1mZGQ1S2YyNGFfYjJZQmhlUkZ5QSIsInNpZCI6IkM3RjUzNjFFODQxRUU1NTcxRTM0MDE1QUI0QzM4RUVDIiwic3ViIjoiZGY5M2YwMTUtYzRiNy00NjM4LWIyNWYtNjJhNTNjZGI5ZmI1IiwiYXV0aF90aW1lIjoxNzY2ODI1NjA3LCJpZHAiOiJsb2NhbCJ9.lg6sp8s9eAvFGJ06o3dIEB_0n12i9QaC0d5Ut7bVquCXiPeHuevkDkLJFNfaY-AuF-f4f8prc00TqAcf3AG1rQCv3J-dF2XSKDHo9-dmeh50OKp-cVkWFsjlKS20anBX1dn-Z_bCNx314n3ACP1I-nvnMs-GSpCsjtTItN88UE-e3opwTKZSSA8dxui37Y4xHZ_HE8VLNcfOjQvLnaCedHcl8CwDGAADLgZlW6_JHyjmXZVHgdOeSWPCAH6pWNJhBtjVuzATnVW3DC62IQKw2uXlV1cvbaEa-WOzP7XAk7htOe8H3PjQoCkmjdEKEn7CUepGBvZ0dySssNmOQUTbRg 
+      
+http://schemas.microsoft.com/claims/authnmethodsreferences : pwd
+sid : C7F5361E841EE5571E34015AB4C38EEC
+http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier : df93f015-c4b7-4638-b25f-62a53cdb9fb5
+auth_time : 1766825607
+http://schemas.microsoft.com/identity/claims/identityprovider : local
+```
+
+<img src="assets/jwt-io-pplsfretdghbvcxdsdsdsdezrqjhgfd.png" alt="jwt-io-pplsfretdghbvcxdsdsdsdezrqjhgfd" />
+
+
+
+## `PKCE` protection
+
+Un `authorization code` perdu permet un attaquant de remplacer la victime lors d'une `session`.
+
+L'attaquant a maintenant les privilèges de la victime.
+
+<img src="assets/pkce-flow-one-ttgfdserassqwxszeartqfddscxxx.png" alt="pkce-flow-one-ttgfdserassqwxszeartqfddscxxx" />
+
+Il y a un `code_verifier` et son `hash` le `code_challenge`.
+
+Le `code_challenge` est envoyé avec la requête d'authentification et il est stocké par l'`ID Provider`.
+
+Ensuite, lors de la demande du `token`, le `code_verifier` est envoyé.
+
+Avec `SHA256` il n'est pas possible de déduire le `code_verifier` depuis le `code_challenge`.
+
+<img src="assets/pkce-flow-two-lkjjuiornbvfgtyrmmlkopnnhyg.png" alt="pkce-flow-two-lkjjuiornbvfgtyrmmlkopnnhyg" />
+
+Le `token endpoint` va hasher le `code_verifier` et vérifier que ce `hash` correspond bien au `code_challenge` envoyé précédement (et stocké).
+
+<img src="assets/authorization-code-flow-with-pkce-rtsghdyueijncbvfdgtrseaoplkjytrsdez.png" alt="authorization-code-flow-with-pkce-rtsghdyueijncbvfdgtrseaoplkjytrsdez" />
+
+
+
+## `Logout`
+
+### Créer des boutons `login` et logout (dans `NavMenu.razor`)	
+
+```react
+    // ...
+	<AuthorizeView>
+        <Authorized>
+                <Button @onclick="Logout">
+                    Logout
+                </Button>
+        </Authorized>
+        <NotAuthorized>
+                <Button @onclick="Login">
+                    Login
+                </Button>            
+        </NotAuthorized>
+    </AuthorizeView>
+</nav>
+```
+
+```cs
+void Logout() => Navigation.NavigateTo($"/logout", forceLoad:true);
+
+void Login() => Navigation.NavigateTo($"/login", forceLoad:true);
+```
+
+#### ! `forceload: true` est obligatoire, sinon une exception est levée
+
+
+
+### les endpoints nécessaires
+
+```cs
+app.MapGet("/login", async (HttpContext context) =>
+{
+    var redirectUrl = "/";
+    await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme,
+        new AuthenticationProperties { RedirectUri = redirectUrl });
+});
+
+app.MapGet("/logout", async (HttpContext context) =>
+{
+    var redirectUrl = "/anonymous";
+    await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+        new AuthenticationProperties { RedirectUri = redirectUrl});
+}).RequireAuthorization();
+```
+
+`/logout` n'est accessible que si on est authentifié (`RequireAuthorization`).
+
+Le `login` utilise `ChallengeAsync` avec `OpenIdConnect`, tandis que le `SignOutAsync` utilise les `Cookies`.
+
+> **`ChallengeAsync("oidc")`** = *“pas de session locale → déclenche le handler OIDC pour rediriger vers l’IdP et obtenir une identité”* ; **`SignInAsync("Cookies")`** = *“identité obtenue → le handler Cookies la persiste localement en émettant le cookie de session”*.
+>
+>  `/login` fait un **Challenge OIDC** (redirect), et au retour OIDC **sign-in automatiquement dans Cookies** via `SignInScheme`; `/logout` sur **Cookies** supprime la session locale (et pour aussi déconnecter l’IdP, on ajoutes en plus un `SignOutAsync("oidc")`).
+
+
+
+### Version de `LogOut` complète (`OIDC`  et `Cookies`)
+
+```cs
+app.MapGet("/logout", (HttpContext context) =>
+{
+    var redirectUrl = "/anonymous";
+    var props = new AuthenticationProperties { RedirectUri = redirectUrl };
+
+    return Results.SignOut(
+        props,
+        [
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            OpenIdConnectDefaults.AuthenticationScheme,
+        ]
+    );
+}).RequireAuthorization();
+```
+
+<img src="assets/results-signout-uuaaeessdzrteygvcbnwwxsqzaerz.png" alt="results-signout-uuaaeessdzrteygvcbnwwxsqzaerz" style="zoom:50%;" />
+
+Cela va invoquer `SignOutAsync` deux fois.
+
+
+
+## `Redirection` après le `Logout`
+
+Pour le moment après un `logout`, on arrive bloqué sur la page de `Logout` du `ID Provider` :
+
+<img src="assets/logout-id-provider-screen-ooplmkiollllhyugtyooplkj.png" alt="logout-id-provider-screen-ooplmkiollllhyugtyooplkj" style="zoom:33%;" />
+
+C'est parce que l'`url` de `callback` n'est pas bonne, il y a d'ailleur un `Warning` dans les logs de `Duende.Identity` :
+
+<img src="assets/invalid-callback-logout-yyhgfrttgdvccxxxxfsderzta.png" alt="invalid-callback-logout-yyhgfrttgdvccxxxxfsderzta" />
 
 
 
