@@ -6,15 +6,16 @@ Le mieux est de mixer un `CAST` avec un `CASE` :
 DECLARE @now datetime2(7) = SYSDATETIME();
 
 SELECT CAST(
-    CASE WHEN EXISTS (
-        SELECT 1
-        FROM dbo.Invitation
-        WHERE Token = @token
-          AND Statut = 1
-          AND UtiliseLe IS NULL
-          AND DebutValidite <= @now
-          AND FinValidite  >  @now
-        ) THEN 1 
+    CASE 
+    	WHEN EXISTS (
+            SELECT 1
+            FROM dbo.Invitation
+            WHERE Token = @token
+              AND Statut = 1
+              AND UtiliseLe IS NULL
+              AND DebutValidite <= @now
+              AND FinValidite  >  @now
+            ) THEN 1 
         ELSE 0 
     END
 AS bit) AS IsValid;
