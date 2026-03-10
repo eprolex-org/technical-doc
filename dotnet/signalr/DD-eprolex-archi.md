@@ -27,7 +27,7 @@ public enum DelegueClientEvents
 
 Il faudrait une archi :
 
-`EnumNames`
+`SignalRNames`
 
 ​	|_ `ClientEvents`
 
@@ -48,4 +48,64 @@ public record DemandeAvisEventNotification(
     string Nom
 );
 ```
+
+
+
+## 3. `Hub` et `HubNotifier`
+
+Le `Hub` contient des méthodes exécutables à distance par le `client`.
+
+J'ai choisi de sortir le chemin inverse et quand le `Hub` a besoin de prévenir les `clients` d'exécuter une méthode, j'utilise un `HubNotifier` pour prévenir le `client`. 
+
+#### Le `HubNotifier` sert à prévenir un groupe de `clients` d'un événement.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

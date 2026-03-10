@@ -1,4 +1,4 @@
-#  15. Retourner un bolléen - Faire un test
+#  15. Retourner un booléen - Faire un test
 
 Le mieux est de mixer un `CAST` avec un `CASE` :
 
