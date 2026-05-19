@@ -99,7 +99,7 @@ Dans le `parent` on doit pouvoir indiquer l'emplacement dans le composant `enfan
 
 
 
-## Genericité et `RenderFragment`
+## Généricité et `RenderFragment`
 
 On veut créer un composant pouvant gérer n'importe quel type de liste :
 
@@ -149,9 +149,9 @@ Cela permet de renommer son `context`.
 
 
 
-## `Razor Syntax`à l'intérieur d'un `Render Fragment`
+## `Razor Syntax` à l'intérieur d'un `Render Fragment`
 
-On peut aussi écrire des instructions `Razor`à l'intérieur de la place laissé pour le `Render Fragment`:
+On peut aussi écrire des instructions `Razor` à l'intérieur de la place laissé pour le `Render Fragment`:
 
 ```cs
 <Confirmation @ref="confirmation" onCancel="onCancel" onConfirm="onConfirm">
@@ -167,8 +167,6 @@ On peut aussi écrire des instructions `Razor`à l'intérieur de la place laiss�
 ```
 
 Ici un `@if` nous permet de choisir ce que l'on passe comme `Render Fragment`.
-
-
 
 
 

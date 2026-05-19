@@ -17,7 +17,7 @@ public class SaveFormEvent
 }
 ```
 
-Si l'`event` n'était pas `async` on aurai:
+Si l'`event` n'était pas `async` on aurait:
 
 ```cs
 public class SaveFormEvent
